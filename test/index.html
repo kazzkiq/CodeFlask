@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CodeFlask Test</title>
+    <link rel="stylesheet" href="../src/codeflask.css">
+    <link rel="stylesheet" href="lib/prism.min.css">
+    <script src="lib/prism.min.js"></script>
+    <script src="../src/codeflask.js"></script>
+    <style>
+    .codeview{
+        width:400px;
+        height:300px;
+        border:1px solid #ccc;
+        background:#f5f5f5;
+        float:left;
+        position:relative;
+    }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="codeview">
+            asd
+        </div>
+        <div class="codeview">
+            asd
+        </div>
+    </div>
+    <script>
+        CodeFlask.run('.codeview', 'javascript');
+    </script>
+</body>
+</html>
