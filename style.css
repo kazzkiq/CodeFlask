@@ -76,9 +76,9 @@ p {
   margin: 0 0 1em 0;
 }
 a {
-  color: #cd5c5c;
+  color: #f11e5f;
   background: transparent;
-  text-decoration: underline;
+  text-decoration: none;
 }
 a:active,
 a:hover {
@@ -434,7 +434,7 @@ input::-moz-focus-inner {
   background: #f9f9f9;
 }
 .button-link {
-  color: #cd5c5c;
+  color: #f11e5f;
   text-decoration: underline;
   border: 0;
   background: transparent;
