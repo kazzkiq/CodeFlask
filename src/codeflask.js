@@ -4,9 +4,9 @@
     function initCodeFlask() {
         var CodeFlask = {};
 
-        CodeFlask.run = function(selector, language) {
+        CodeFlask.run = function(selector, defaultLanguage) {
 
-            CodeFlask.language = language;
+            CodeFlask.defaultLanguage = defaultLanguage || 'markup';
 
             var target = document.querySelectorAll(selector);
 
@@ -24,15 +24,22 @@
         CodeFlask.generateDOM = function(target) {
             var textarea = document.createElement('TEXTAREA'),
                 highlightPre = document.createElement('PRE'),
-                highlightCode = document.createElement('CODE');
+                highlightCode = document.createElement('CODE'),
+                lang;
+
+            lang = target.dataset.language || CodeFlask.defaultLanguage;
 
             textarea.classList.add('CodeFlask__textarea')
             highlightPre.classList.add('CodeFlask__pre');
             highlightCode.classList.add('CodeFlask__code');
-            highlightCode.classList.add('language-' + CodeFlask.language);
+            highlightCode.classList.add('language-' + lang);
 
             target.classList.add('CodeFlask');
-            target.innerHTML = '';
+
+            //Faster than innerHTML = ''
+            while(target.firstChild) {
+                target.removeChild(target.firstChild);
+            }
 
             target.appendChild(textarea);
             target.appendChild(highlightPre);
@@ -44,7 +51,7 @@
         }
 
         CodeFlask.handleInput = function(textarea, highlightCode, highlightPre) {
-            var input, selStartPos, inputVal;
+            var input, selStartPos, inputVal, roundedScroll;
 
             textarea.addEventListener('input', function(e) {
                 input = this;
@@ -79,41 +86,29 @@
             });
 
             textarea.addEventListener('scroll', function(){
-                this.scrollTop = Math.floor(this.scrollTop);
-                highlightPre.style.top = "-" + this.scrollTop + "px";
-                console.log(highlightPre.style.top);
+
+                roundedScroll = Math.floor(this.scrollTop);
+
+                // Fixes issue of desync text on mouse wheel, fuck Firefox.
+                if(navigator.userAgent.toLowerCase().indexOf('firefox') < 0) {
+                    this.scrollTop = roundedScroll;
+                }
+
+                highlightPre.style.top = "-" + roundedScroll + "px";
             });
 
         }
 
         CodeFlask.handlePreElement = function(hightlightPre) {
-            hightlightPre.addEventListener('scroll', function(e) {
-                console.log("Heeeeey! (scroll)");
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
+
+            ['scroll', 'click', 'mouseover', 'wheel'].forEach(function(event){
+                hightlightPre.addEventListener(event, function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                });
             });
 
-            hightlightPre.addEventListener('click', function(e) {
-                console.log("Heeeeey! (click)");
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            });
-
-            hightlightPre.addEventListener('mouseover', function(e) {
-                console.log("Heeeeey! (mouseover)");
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            });
-
-            hightlightPre.addEventListener('wheel', function(e) {
-                console.log("Heeeeey! (wheel)");
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            });
         }
 
         return CodeFlask;
@@ -122,7 +117,7 @@
     if(typeof(CodeFlask) === 'undefined') {
         window.CodeFlask = initCodeFlask();
     }else{
-        console.error('CodeFlask already exists in your page.');
+        console.error('A CodeFlask instance already exists in your page.');
         console.error('Please check for conflicts on your JS libraries.');
     }
 })(window);
