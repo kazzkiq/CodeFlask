@@ -9,22 +9,61 @@
     <script src="lib/prism.min.js"></script>
     <script src="../src/codeflask.js"></script>
     <style>
-    .codeview{
-        width:400px;
-        height:300px;
+    .code-column {
+        float:left;
+        padding:15px;
+    }
+    .code-column h2{
+        font-size:15px;
+        background:yellow;
+    }
+    .codeview {
+        width:200px;
+        height:200px;
         border:1px solid #ccc;
         background:#f5f5f5;
-        float:left;
         position:relative;
     }
     </style>
 </head>
 <body>
-    <div>
-        <div class="codeview"></div>
+    <div class="code-column">
+        <h2>Running via <code>CodeFlask.run()</code></h2>
+        <h2>JavaScript</h2>
+        <div class="codeview" id="code"></div>
+        <button onclick="updateCode()">Update code content</button>
+    </div>
+    <div class="code-column">
+        <h2>Running via <code>CodeFlask.runAll()</code></h2>
+        <h2>HTML</h2>
+        <div class="codeview multiple"></div>
+    </div>
+    <div class="code-column">
+        <h2>Running via <code>CodeFlask.runAll()</code></h2>
+        <h2>HTML</h2>
+        <div class="codeview multiple"></div>
+    </div>
+    <div class="code-column">
+        <h2>Running via <code>CodeFlask.runAll()</code> + data-language</h2>
+        <h2>HTML but data-lang="css" (so, CSS)</h2>
+        <div class="codeview multiple" data-language="css"></div>
     </div>
     <script>
-        CodeFlask.run('.codeview');
+        CodeFlask.run('#code', {
+            language: 'js'
+        });
+
+        CodeFlask.runAll('.multiple', {
+            language: 'html'
+        });
+
+        CodeFlask.onUpdate(function(code){
+            console.log(code);
+        });
+
+        function updateCode() {
+            CodeFlask.update('var goo = "stick"');
+        }
     </script>
 </body>
 </html>

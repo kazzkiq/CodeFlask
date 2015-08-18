@@ -4,33 +4,53 @@
     function initCodeFlask() {
         var CodeFlask = {};
 
-        CodeFlask.run = function(selector, defaultLanguage) {
-
-            CodeFlask.defaultLanguage = defaultLanguage || 'markup';
-
+        CodeFlask.run = function(selector, opts) {
             var target = document.querySelectorAll(selector);
 
             if(target.length > 1) {
-                var i;
-                for(i=0; i < target.length; i++) {
-                    CodeFlask.generateDOM(target[i]);
-                }
+                throw 'CodeFlask.js ERROR: run() expects only one element, ' +
+                target.length + ' given. Use CodeFlask.runAll() instead.';
             }else {
-                CodeFlask.generateDOM(target[0]);
+                CodeFlask.generateDOM(target[0], false, opts);
             }
 
         }
 
-        CodeFlask.generateDOM = function(target) {
+        CodeFlask.runAll = function(selector, opts) {
+            var target = document.querySelectorAll(selector);
+
+            var i;
+            for(i=0; i < target.length; i++) {
+                CodeFlask.generateDOM(target[i], true, opts);
+            }
+        }
+
+        CodeFlask.generateDOM = function(target, isMultiple, opts) {
+            (opts.language.match(/html|xml|xhtml|svg/)) ? opts.language = 'markup' : null;
+            (opts.language.match(/js/)) ? opts.language = 'javascript' : null;
+            
+            CodeFlask.defaultLanguage = target.dataset.language || opts.language || 'markup';
+
             var textarea = document.createElement('TEXTAREA'),
                 highlightPre = document.createElement('PRE'),
                 highlightCode = document.createElement('CODE'),
                 lang, initialCode;
 
+            (opts.language.match(/html|xml|xhtml|svg/)) ? opts.language = 'markup' : null;
+            (opts.language.match(/js/)) ? opts.language = 'javascript' : null;
+            CodeFlask.defaultLanguage = opts.language || 'markup';
+
+            // Prevent this var from being refreshed when rendering multiple
+            // instances
+            if(!isMultiple) {
+                CodeFlask.textarea = textarea;
+                CodeFlask.highlightCode = highlightCode;
+            }
+
             lang = target.dataset.language || CodeFlask.defaultLanguage;
             initialCode = target.textContent;
 
-            textarea.classList.add('CodeFlask__textarea')
+            textarea.classList.add('CodeFlask__textarea');
             highlightPre.classList.add('CodeFlask__pre');
             highlightCode.classList.add('CodeFlask__code');
             highlightCode.classList.add('language-' + lang);
@@ -61,8 +81,30 @@
 
         }
 
+        CodeFlask.onUpdate = function(cb) {
+            if(typeof(cb) == "function") {
+                CodeFlask.textarea.addEventListener('input', function(e) {
+                    cb(this.value);
+                });
+            }else{
+                throw 'CodeFlask.js ERROR: onUpdate() expects function, ' +
+                typeof(cb) + ' given instead.';
+            }
+        }
+
+        CodeFlask.update = function(string) {
+            var evt = document.createEvent("HTMLEvents");
+
+            CodeFlask.textarea.value = string;
+            CodeFlask.renderOutput(CodeFlask.highlightCode, CodeFlask.textarea);
+            Prism.highlightAll();
+
+            evt.initEvent("input", false, true);
+            CodeFlask.textarea.dispatchEvent(evt);
+        }
+
         CodeFlask.renderOutput = function(highlightCode, input) {
-            highlightCode.innerHTML = "\n" + input.value.replace(/&/g, "&amp;")
+            highlightCode.innerHTML = input.value.replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;") + "\n";
         }
