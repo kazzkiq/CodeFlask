@@ -3,7 +3,7 @@ A micro code-editor for awesome web pages.
 
 ## About
 
-CodeFlask.js was made as an attempt to create a leaner code editor for simple purposes. Just a few lines of code and you're ready to go.
+CodeFlask.js was made as an attempt to create a leaner code editor for simple purposes. Just a few lines of code and you're ready to play with code on your browser.
 
 If you want a robust web code editor you can check projects that aim that big, such as CodeMirror.
 
