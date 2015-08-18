@@ -50,6 +50,8 @@ Few things to consider:
 - If you don't specify the attribute `data-language` or an default language for all editors, by default CodeFlask will render your editor as `markup` (HTML).
 
 
-## Credits
+## Credits & Thanks
+
+Made in Rio.
 
 CodeFlask.js was made possible by [Prism.js](https://github.com/PrismJS/prism) by [Lea Verou](http://lea.verou.me/).
