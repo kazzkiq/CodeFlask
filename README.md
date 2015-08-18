@@ -54,4 +54,4 @@ Few things to consider:
 
 Made in Rio.
 
-CodeFlask.js was made possible by [Prism.js](https://github.com/PrismJS/prism) by [Lea Verou](http://lea.verou.me/).
+CodeFlask.js was made possible and have dependency on [Prism.js](https://github.com/PrismJS/prism) by [Lea Verou](http://lea.verou.me/).
