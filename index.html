@@ -14,6 +14,8 @@
   <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
 
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="less/vendor/codeflask.css">
+  <link rel="stylesheet" href="less/vendor/prism.css">
 
 </head>
 <body>
@@ -26,7 +28,7 @@
             <a href="https://github.com/kazzkiq/CodeFlask.js/archive/master.zip" class="button animate fade-in">Download Latest</a>
         </div>
         <div class="col-tablet-6 col-12">
-            <a href="https://github.com/kazzkiq/CodeFlask.js" class="button animate fade-in">View Documentation</a>
+            <a href="https://github.com/kazzkiq/CodeFlask.js#codeflaskjs" class="button animate fade-in">View Documentation</a>
         </div>
     </div>
 
@@ -38,9 +40,19 @@
             <div class="code-buttons"></div>
             My-Awesome-File-Sample.js
         </header>
-        <div class="code-editor">
-            blablabla
-        </div>
+        <div class="code-editor">// Feel free to play with the code. :)
+
+function Hey(phrase)
+{
+    phrase = phrase || "Hey";
+    return console.log(phrase);
+}
+
+window.onLoad = function() {
+    Hey();
+    Hey("Jude");
+    Hey("Don't make it bad.");
+}</div>
     </div>
 </div>
 
@@ -98,7 +110,7 @@
             <div class="col-12 col-tablet-6">
                 <h1 class="font-light">Documentation</h1>
                 <p>For more info on how to use it you can go to the project’s Github Page and read the README.md.</p>
-                <a href="https://github.com/kazzkiq/CodeFlask.js" class="button ">Go to the Github Page</a>
+                <a href="https://github.com/kazzkiq/CodeFlask.js#usage" class="button">Go to the Github Page</a>
             </div>
             <div class="col-12 col-tablet-6">
                 <h1 class="font-light">Credit & Thanks</h1>
@@ -111,14 +123,21 @@
     </div>
 </footer>
 
-<!-- Google Analytics - Update UA-XXXXX-X ID -->
+<script>
+    window.onload = function() {
+        CodeFlask.run('.code-editor', 'javascript')
+    };
+</script>
+
+<script src="js/vendor/codeflask.js"></script>
+<script src="js/vendor/prism.min.js"></script>
 <script>
   (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
   function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
   e=o.createElement(i);r=o.getElementsByTagName(i)[0];
   e.src='//www.google-analytics.com/analytics.js';
   r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-  ga('create','UA-XXXXX-X');ga('send','pageview');
+  ga('create','UA-66459426-1');ga('send','pageview');
 </script>
 
 </body>

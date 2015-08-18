@@ -306,9 +306,7 @@ table tfoot th {
   padding: .8em .5em;
   border-bottom: 1px solid #e9e9e9;
 }
-code,
 kbd,
-pre,
 samp {
   font-size: 13px;
   font-size: 0.8125rem;
@@ -321,11 +319,6 @@ samp {
   font-weight: normal;
   padding: 5px;
   white-space: pre-wrap;
-}
-pre {
-  padding: 10px;
-  overflow: auto;
-  border: 1px solid #d7d7d7;
 }
 fieldset,
 legend {
@@ -350,7 +343,7 @@ input,
 optgroup,
 select,
 textarea {
-  color: inherit;
+  color: #111;
   font: inherit;
   margin: 0;
 }
@@ -1127,7 +1120,6 @@ input::-moz-focus-inner {
   min-height: 90vh;
   background: url(img/bg-main_2x.png) #48466d;
   background-size: 188px auto;
-  text-align: center;
   border-bottom: 15px solid #46cdcf;
   margin-bottom: 5rem;
 }
@@ -1137,19 +1129,25 @@ input::-moz-focus-inner {
 .call-to-action-wrapper .logo {
   width: 227px;
   margin-top: 110px;
+  display: block;
+  margin: 0 auto;
+  padding-top: 110px;
 }
 .call-to-action-wrapper h2 {
   color: #fff;
   margin-top: 1rem;
+  text-align: center;
 }
 .call-to-action-wrapper h5 {
   color: rgba(255, 255, 255, 0.3);
   opacity: 0.3;
   margin-top: 0;
+  text-align: center;
 }
 .call-to-action-wrapper .button {
   display: block;
   margin-bottom: 1rem;
+  text-align: center;
 }
 .call-to-action-wrapper .micro-container {
   margin: 3rem auto;
@@ -1213,6 +1211,7 @@ footer .col-tablet-6 {
   position: relative;
   color: #a5a5a5;
   border-bottom: 1px solid #e0e0e0;
+  text-align: center;
 }
 .code-window .code-header .code-buttons {
   position: absolute;
