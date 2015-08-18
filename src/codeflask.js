@@ -16,7 +16,7 @@
                     CodeFlask.generateDOM(target[i]);
                 }
             }else {
-                CodeFlask.generateDOM(target);
+                CodeFlask.generateDOM(target[0]);
             }
 
         }
@@ -25,9 +25,10 @@
             var textarea = document.createElement('TEXTAREA'),
                 highlightPre = document.createElement('PRE'),
                 highlightCode = document.createElement('CODE'),
-                lang;
+                lang, initialCode;
 
             lang = target.dataset.language || CodeFlask.defaultLanguage;
+            initialCode = target.textContent;
 
             textarea.classList.add('CodeFlask__textarea')
             highlightPre.classList.add('CodeFlask__pre');
@@ -45,9 +46,24 @@
             target.appendChild(highlightPre);
             highlightPre.appendChild(highlightCode);
 
+
+            // Render initial code inside tag
+            textarea.value = initialCode;
+            CodeFlask.renderOutput(highlightCode, textarea);
+
+            Prism.highlightAll();
+
             CodeFlask.handleInput(textarea, highlightCode, highlightPre);
             CodeFlask.handlePreElement(highlightPre);
 
+
+
+        }
+
+        CodeFlask.renderOutput = function(highlightCode, input) {
+            highlightCode.innerHTML = "\n" + input.value.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;") + "\n";
         }
 
         CodeFlask.handleInput = function(textarea, highlightCode, highlightPre) {
@@ -56,12 +72,7 @@
             textarea.addEventListener('input', function(e) {
                 input = this;
 
-                // Change content only if not arrows event
-                //if(e.keyCode < 37 && e.keyCode > 40) {
-                    highlightCode.innerHTML = input.value.replace(/&/g, "&amp;")
-                        .replace(/</g, "&lt;")
-                        .replace(/>/g, "&gt;") + "\n";
-                //}
+                CodeFlask.renderOutput(highlightCode, input);
 
                 Prism.highlightAll();
             });
