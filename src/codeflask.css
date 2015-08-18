@@ -26,10 +26,11 @@
     outline:none;
     resize:none;
     opacity:0.4;
+    color:#000;
     margin:0;
     z-index:1;
     height:100%;
-    -webkit-appearance:none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .CodeFlask__pre{
@@ -42,4 +43,6 @@
 .CodeFlask__code{
     font-size:inherit;
     font-family:inherit;
+    color:inherit;
+    display:block;
 }
