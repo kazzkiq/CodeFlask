@@ -1,6 +1,8 @@
 # CodeFlask.js
 A micro code-editor for awesome web pages.
 
+<img width="983" alt="qqqqqqqqqq" src="https://cloud.githubusercontent.com/assets/1953194/9321840/ed0eb022-4541-11e5-9390-30f7dfff82e1.png">
+
 ## About
 
 CodeFlask.js was made as an attempt to create a leaner code editor for simple purposes. Just a few lines of code and you're ready to play with code on your browser.
