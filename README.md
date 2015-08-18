@@ -21,8 +21,8 @@ Example:
 <head>
   <link rel="stylesheet" href="prism.min.css">
   <link rel="stylesheet" href="codeflask.css">
-  <script src="prism.min.js"></script>
-  <script src="codeflask.js"></script>
+  <script src="prism.min.js" async></script>
+  <script src="codeflask.js" async></script>
 </head>
 ```
 
