@@ -42,11 +42,7 @@
                 highlightCode.style.paddingLeft = '3px';
             }
 
-            //Faster than innerHTML = ''
-            while(target.firstChild) {
-                target.removeChild(target.firstChild);
-            }
-
+            target.innerHTML = '';
             target.appendChild(textarea);
             target.appendChild(highlightPre);
             highlightPre.appendChild(highlightCode);
