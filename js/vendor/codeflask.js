@@ -37,6 +37,11 @@
 
             target.classList.add('CodeFlask');
 
+            // Fixing iOS "drunk-text" issue
+            if(/iPad|iPhone|iPod/.test(navigator.platform)) {
+                highlightCode.style.paddingLeft = '3px';
+            }
+
             //Faster than innerHTML = ''
             while(target.firstChild) {
                 target.removeChild(target.firstChild);

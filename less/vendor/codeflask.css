@@ -3,17 +3,6 @@
     overflow:hidden;
 }
 
-.CodeFlask__textarea{
-    border:none;
-    background:transparent;
-    outline:none;
-    resize:none;
-    opacity:0.4;
-    margin:0;
-    z-index:1;
-    height:100%;
-}
-
 .CodeFlask__textarea,
 .CodeFlask__pre{
     box-sizing:border-box;
@@ -23,12 +12,25 @@
     width:100%;
     padding:1rem;
     border:none;
-    font-family:'PT Mono', monospace;
-    font-size:0.8rem;
+    font-family: monospace;
+    font-size:13px;
     background:transparent;
     white-space:pre-wrap;
     line-height:1.5em;
     word-wrap: break-word;
+    color:#111;
+}
+
+.CodeFlask__textarea{
+    border:none;
+    background:transparent;
+    outline:none;
+    resize:none;
+    opacity:0.4;
+    margin:0;
+    z-index:1;
+    height:100%;
+    -webkit-overflow-scrolling: touch;
 }
 
 .CodeFlask__pre{
@@ -39,10 +41,8 @@
 }
 
 .CodeFlask__code{
-    padding:0;
-	margin:0;
-	display:block;
-	color:#666;
-	font-size:0.8rem;
-	font-family:'PT Mono', monospace;
+    font-size:inherit;
+    font-family:inherit;
+    color:inherit;
+    display:block;
 }
