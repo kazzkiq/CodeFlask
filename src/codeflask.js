@@ -1,5 +1,5 @@
 function CodeFlask() {
-    
+
 }
 
 CodeFlask.prototype.run = function(selector, opts) {
@@ -7,7 +7,7 @@ CodeFlask.prototype.run = function(selector, opts) {
 
     if(target.length > 1) {
         throw 'CodeFlask.js ERROR: run() expects only one element, ' +
-        target.length + ' given. Use CodeFlask.runAll() instead.';
+        target.length + ' given. Use .runAll() instead.';
     } else {
         this.scaffold(target[0], false, opts);
     }
@@ -38,7 +38,7 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
     this.defaultLanguage = target.dataset.language || opts.language || 'markup';
 
 
-    // Prevent this var from being refreshed when rendering multiple
+    // Prevent these vars from being refreshed when rendering multiple
     // instances
     if(!isMultiple) {
         this.textarea = textarea;
@@ -56,7 +56,7 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
         highlightCode.style.paddingLeft = '3px';
     }
 
-    // Generating editor's DOM
+    // Appending editor elements to DOM
     target.innerHTML = '';
     target.appendChild(textarea);
     target.appendChild(highlightPre);
