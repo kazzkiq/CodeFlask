@@ -47,14 +47,14 @@ After that, all you need to do is to define an element where your editor should 
 </body>
 ```
 
-Alternatively, you can call a language directly on your function call:
+Alternatively, you can define a language directly on your function call:
 
 ```javascript
 var flask = new CodeFlask;
 flask.run('#my-code-wrapper', { language: 'javascript' })
 ```
 
- It is important to remember that CodeFlask.js checks primarily for `data-language` attribute, then for the function call version. If none of those are declared, the editor will render by default with **HTML syntax**;
+ It is important to remember that CodeFlask.js checks primarily for `data-language` attribute, then for the function call version. If none of those are declared, the editor will render in **HTML syntax**;
 
 #### Listening for changes and updating your editor
 
@@ -100,8 +100,30 @@ If you have a lot of editors on your page you can load them all by using `.runAl
 
 Note: When using `.runAll()`, the listener and update APIs are **not** enabled anymore.
 
+#### How do I define the size of my editor?
+
+The editor will assume the size of the element it was declared in. All you need to do is to set the dimensions of this element, example:
+
+```html
+...
+<body>
+  <style>
+  #my-code-wrapper {
+      width:350px;
+      height:250px;
+      position:relative; /* Position must be: relative, absolute or fixed */
+  }
+  </style>
+
+  <div id="#my-code-wrapper" data-language="python"></div>
+
+  <script>
+    var flask = new CodeFlask;
+    flask.run('#my-code-wrappers');
+  </script>
+</body>
+```
+
 ## Credits & Thanks
 
-Made in Rio.
-
-CodeFlask.js was made possible and have dependency on [Prism.js](https://github.com/PrismJS/prism) by [Lea Verou](http://lea.verou.me/).
+CodeFlask.js was made possible by lots of pizzas and have dependency on [Prism.js](https://github.com/PrismJS/prism) by [Lea Verou](http://lea.verou.me/).
