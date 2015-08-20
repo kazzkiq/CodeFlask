@@ -102,7 +102,7 @@ Note: When using `.runAll()`, the listener and update APIs are **not** enabled a
 
 #### How do I define the size of my editor?
 
-The editor will assume the size of the element it was declared in. All you need to do is to set the dimensions of this element, example:
+The editor will assume the size of the element it was declared in. All you need to do is to set the dimensions of this element in your style, example:
 
 ```html
 ...
@@ -115,7 +115,7 @@ The editor will assume the size of the element it was declared in. All you need 
   }
   </style>
 
-  <div id="#my-code-wrapper" data-language="python"></div>
+  <div id="my-code-wrapper" data-language="python"></div>
 
   <script>
     var flask = new CodeFlask;
@@ -126,4 +126,4 @@ The editor will assume the size of the element it was declared in. All you need 
 
 ## Credits & Thanks
 
-CodeFlask.js was made possible by lots of pizzas and have dependency on [Prism.js](https://github.com/PrismJS/prism) by [Lea Verou](http://lea.verou.me/).
+CodeFlask.js was made possible by lots of pizzas and [Prism.js](https://github.com/PrismJS/prism) by [Lea Verou](http://lea.verou.me/).
