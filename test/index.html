@@ -49,20 +49,23 @@
         <div class="codeview multiple" data-language="css"></div>
     </div>
     <script>
-        CodeFlask.run('#code', {
+        var flask = new CodeFlask,
+            flasks = new CodeFlask;
+
+        flask.run('#code', {
             language: 'js'
         });
 
-        CodeFlask.runAll('.multiple', {
+        flasks.runAll('.multiple', {
             language: 'html'
         });
 
-        CodeFlask.onUpdate(function(code){
+        flask.onUpdate(function(code){
             console.log(code);
         });
 
         function updateCode() {
-            CodeFlask.update('var goo = "stick"');
+            flask.update('var goo = "stick"');
         }
     </script>
 </body>

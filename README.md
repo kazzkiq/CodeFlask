@@ -1,11 +1,13 @@
 # CodeFlask.js
 A micro code-editor for awesome web pages.
 
-<img width="983" alt="qqqqqqqqqq" src="https://cloud.githubusercontent.com/assets/1953194/9321840/ed0eb022-4541-11e5-9390-30f7dfff82e1.png">
+<img width="983" alt="CodeFlask.js" src="https://cloud.githubusercontent.com/assets/1953194/9321840/ed0eb022-4541-11e5-9390-30f7dfff82e1.png">
 
 ## About
 
-CodeFlask.js was made as an attempt to create a leaner code editor for simple purposes. Just a few lines of code and you're ready to play with code on your browser.
+CodeFlask.js lets you easily and effortless put an code-editor to your web page.
+
+It was made as an attempt to create a leaner editor for simple purposes. Just a few lines of code and you're ready to play with code in the browser.
 
 If you want a robust web code editor you can check projects that aim that big, such as CodeMirror.
 
@@ -36,24 +38,92 @@ After that, all you need to do is to define an element where your editor should 
 ```html
 ...
 <body>
-  <div class="my-code-wrapper" data-language="javascript"></div>
-  
+  <div id="my-code-wrapper" data-language="javascript"></div>
+
   <script>
-    CodeFlask.run('.my-code-wrapper');
+    var flask = new CodeFlask;
+    flask.run('#my-code-wrapper');
   </script>
 </body>
 ```
 
-----
+Alternatively, you can define a language directly on your function call:
 
-Few things to consider:
-- You can render one or multiple editors at once, e.g.: `CodeFlask.run('#lone-editor')` or `CodeFlask.run('.my-editors')`;
-- You can specify an default language for all editors, e.g.: `CodeFlask.run('.my-editors', 'javascript')`.
-- If you don't specify the attribute `data-language` or an default language for all editors, by default CodeFlask will render your editor as `markup` (HTML).
+```javascript
+var flask = new CodeFlask;
+flask.run('#my-code-wrapper', { language: 'javascript' })
+```
 
+ It is important to remember that CodeFlask.js checks primarily for `data-language` attribute, then for the function call version. If none of those are declared, the editor will render in **HTML syntax**;
+
+#### Listening for changes and updating your editor
+
+You can also listen for changes in your editor. This is useful if you want to do some kind of realtime rendering of what you're coding, or detecting the input code for validation purposes, etc.
+
+You can listen for it using `.onUpdate()`:
+
+```javascript
+var flask = new CodeFlask;
+flask.run('#my-editor');
+
+flask.onUpdate(function(code) {
+    console.log("User's input code: " + code);
+});
+```
+
+Alternatively, if you want to update an editor, you can use `.update()`:
+
+```javascript
+var flask = new CodeFlask;
+flask.run('#my-editor');
+
+flask.update("<button>Heeeey, whats up?</button>");
+```
+
+#### Loading multiple editors
+
+If you have a lot of editors on your page you can load them all by using `.runAll()` instead of `.run()`:
+
+```html
+...
+<body>
+  <div class="my-code-wrappers" data-language="javascript"></div>
+  <div class="my-code-wrappers" data-language="css"></div>
+  <div class="my-code-wrappers" data-language="ruby"></div>
+
+  <script>
+    var flask = new CodeFlask;
+    flask.runAll('.my-code-wrappers');
+  </script>
+</body>
+```
+
+Note: When using `.runAll()`, the listener and update APIs are **not** enabled anymore.
+
+#### How do I define the size of my editor?
+
+The editor will assume the size of the element it was declared in. All you need to do is to set the dimensions of this element in your style, example:
+
+```html
+...
+<body>
+  <style>
+  #my-code-wrapper {
+      width:350px;
+      height:250px;
+      position:relative; /* Position must be: relative, absolute or fixed */
+  }
+  </style>
+
+  <div id="my-code-wrapper" data-language="python"></div>
+
+  <script>
+    var flask = new CodeFlask;
+    flask.run('#my-code-wrappers');
+  </script>
+</body>
+```
 
 ## Credits & Thanks
 
-Made in Rio.
-
-CodeFlask.js was made possible and have dependency on [Prism.js](https://github.com/PrismJS/prism) by [Lea Verou](http://lea.verou.me/).
+CodeFlask.js was made possible by lots of pizzas and [Prism.js](https://github.com/PrismJS/prism) by [Lea Verou](http://lea.verou.me/).
