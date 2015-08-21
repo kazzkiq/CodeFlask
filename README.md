@@ -3,6 +3,7 @@ A micro code-editor for awesome web pages.
 
 <img width="983" alt="CodeFlask.js" src="https://cloud.githubusercontent.com/assets/1953194/9321840/ed0eb022-4541-11e5-9390-30f7dfff82e1.png">
 
+
 ## About
 
 CodeFlask.js lets you easily and effortless put an code-editor to your web page.
@@ -11,6 +12,13 @@ It was made as an attempt to create a leaner editor for simple purposes. Just a 
 
 If you want a robust web code editor you can check projects that aim that big, such as CodeMirror.
 
+## Install
+
+You can use bower to download the sources and the dependencies
+
+```
+bower install codeflask.js
+```
 
 ## Usage
 
