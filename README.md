@@ -14,11 +14,13 @@ If you want a robust web code editor you can check projects that aim that big, s
 
 ## Install
 
-You can use bower to download the sources and the dependencies
+You can use Bower to download the sources and the dependencies:
 
 ```
-bower install codeflask.js
+bower install codeflask
 ```
+
+Or download them manually if you want to.
 
 ## Usage
 
