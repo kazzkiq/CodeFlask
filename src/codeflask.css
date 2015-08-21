@@ -10,9 +10,9 @@
     top:0;
 	left:0;
     width:100%;
-    padding:1rem;
+    padding:1rem !important;
     border:none;
-    font-family: monospace;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
     font-size:13px;
     background:transparent;
     white-space:pre-wrap;
@@ -38,6 +38,9 @@
     pointer-events:none;
     overflow-y:auto;
     margin:0;
+    min-height:100%;
+    margin:0 !important;
+    background:transparent !important;
 }
 
 .CodeFlask__code{
