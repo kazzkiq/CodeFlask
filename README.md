@@ -9,6 +9,13 @@ CodeFlask.js was made as an attempt to create a leaner code editor for simple pu
 
 If you want a robust web code editor you can check projects that aim that big, such as CodeMirror.
 
+## Install
+
+You can use bower to download the sources and the dependencies
+
+```
+bower install codeflask.js
+```
 
 ## Usage
 
