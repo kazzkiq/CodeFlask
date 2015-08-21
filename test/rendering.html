@@ -35,19 +35,20 @@
     </div>
 
     <script>
-        var styleTag = document.createElement("STYLE");
+        var styleTag = document.createElement("STYLE"),
+            flask = new CodeFlask;
 
         document.querySelector('head').appendChild(styleTag);
 
-        CodeFlask.run('#code', {
+        flask.run('#code', {
             language: 'css'
         });
 
-        CodeFlask.onUpdate(function(code) {
+        flask.onUpdate(function(code) {
             styleTag.innerHTML = code;
         });
 
-        CodeFlask.update("h1{\n    color:blue;\n    box-shadow:0 0 0 10px red;\n}");
+        flask.update("h1{\n    color:blue;\n    box-shadow:0 0 0 10px red;\n}");
     </script>
 </body>
 </html>
