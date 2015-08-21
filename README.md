@@ -1,7 +1,7 @@
 # CodeFlask.js
 A micro code-editor for awesome web pages.
 
-<img width="983" alt="qqqqqqqqqq" src="https://cloud.githubusercontent.com/assets/1953194/9321840/ed0eb022-4541-11e5-9390-30f7dfff82e1.png">
+<img width="983" alt="CodeFlask.js demo image" src="https://cloud.githubusercontent.com/assets/1953194/9321840/ed0eb022-4541-11e5-9390-30f7dfff82e1.png">
 
 ## About
 
