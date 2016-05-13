@@ -14,10 +14,16 @@ If you want a robust web code editor you can check projects that aim that big, s
 
 ## Install
 
-You can use Bower to download the sources and the dependencies:
+
+**Bower:**
 
 ```
 bower install codeflask
+```
+
+**CDN (provided by [cdnjs](https://github.com/cdnjs/cdnjs)):**
+```
+https://cdnjs.cloudflare.com/ajax/libs/CodeFlask.js/0.1.1/codeflask.min.js
 ```
 
 Or download them manually if you want to.
