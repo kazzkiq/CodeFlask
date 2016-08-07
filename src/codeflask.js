@@ -33,6 +33,15 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
         initialCode = target.textContent,
         lang;
 
+    if(!opts.enableAutocorrect == true)
+    {
+        // disable autocorrect and spellcheck features
+        textarea.setAttribute('spellcheck', 'false');
+        textarea.setAttribute('autocapitalize', 'off');
+        textarea.setAttribute('autocomplete', 'off');
+        textarea.setAttribute('autocorrect', 'off');
+    }
+
     opts.language = this.handleLanguage(opts.language);
 
     this.defaultLanguage = target.dataset.language || opts.language || 'markup';
