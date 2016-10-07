@@ -49,3 +49,7 @@
     color:inherit;
     display:block;
 }
+
+.CodeFlask__is-code{
+    white-space: pre;
+}
