@@ -1,0 +1,30 @@
+{
+  "name": "codeflask",
+  "version": "0.2.0",
+  "description": "A micro code-editor for awesome web pages",
+  "main": "index.js",
+  "files": [
+    "src/codeflask.css",
+    "src/codeflask.js"
+  ],
+  "dependencies": {
+    "prismjs": "^1.6.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kazzkiq/CodeFlask.js.git"
+  },
+  "keywords": [
+    "code-editor",
+    "code",
+    "syntax-highlight",
+    "highlight"
+  ],
+  "author": "Claudio Holanda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kazzkiq/CodeFlask.js/issues"
+  },
+  "homepage": "https://kazzkiq.github.io/CodeFlask.js/"
+}

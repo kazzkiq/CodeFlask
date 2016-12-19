@@ -1,6 +1,6 @@
 {
   "name": "codeflask.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "homepage": "http://kazzkiq.github.io/CodeFlask.js/",
   "repository": {
     "type": "git",
@@ -13,7 +13,10 @@
     "prism": "~1.0.1"
   },
   "description": "A micro code-editor for awesome web pages.",
-  "main": "src/codeflask.js",
+  "main": [
+    "src/codeflask.js",
+    "src/codeflask.css"
+  ],
   "keywords": [
     "code-editor",
     "plugin",
