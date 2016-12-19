@@ -23,6 +23,12 @@ If you want a robust web code editor you can check projects that aim that big, s
 bower install codeflask
 ```
 
+**NPM:**
+
+```
+npm install codeflask
+```
+
 **CDN (provided by [cdnjs](https://github.com/cdnjs/cdnjs)):**
 ```
 https://cdnjs.cloudflare.com/ajax/libs/CodeFlask.js/0.1.1/codeflask.min.js
