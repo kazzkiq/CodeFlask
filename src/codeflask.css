@@ -31,6 +31,7 @@
     z-index:1;
     height:100%;
     -webkit-overflow-scrolling: touch;
+    -webkit-text-fill-color: transparent;
 }
 
 .CodeFlask__pre{
