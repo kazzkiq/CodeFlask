@@ -1,5 +1,5 @@
-function CodeFlask() {
-
+function CodeFlask(indent) {
+  this.indent = indent || "    ";
 }
 
 CodeFlask.prototype.run = function(selector, opts) {
@@ -93,7 +93,9 @@ CodeFlask.prototype.handleInput = function(textarea, highlightCode, highlightPre
         input,
         selStartPos,
         inputVal,
-        roundedScroll;
+        roundedScroll,
+        currentLineStart,
+        indentLength;
 
     textarea.addEventListener('input', function(e) {
         input = this;
@@ -107,13 +109,29 @@ CodeFlask.prototype.handleInput = function(textarea, highlightCode, highlightPre
         input = this,
         selStartPos = input.selectionStart,
         inputVal = input.value;
+        currentLineStart = selStartPos - input.value.substr(0, selStartPos).split("\n").pop().length;
 
-        // If TAB pressed, insert four spaces
-        if(e.keyCode === 9){
-            input.value = inputVal.substring(0, selStartPos) + "    " + inputVal.substring(selStartPos, input.value.length);
-            input.selectionStart = selStartPos + 4;
-            input.selectionEnd = selStartPos + 4;
-            e.preventDefault();
+        // If tab pressed, indent
+        if (e.keyCode === 9) {
+          e.preventDefault();
+
+          // Allow shift-tab
+          if (e.shiftKey) {
+            indentLength = self.indent.length;
+
+            // If the current line begins with the indent, unindent
+            if (inputVal.substring(currentLineStart, currentLineStart + indentLength) == self.indent) {
+              input.value = inputVal.substring(0, currentLineStart) +
+                            inputVal.substring(currentLineStart + indentLength, input.value.length);
+              input.selectionStart = selStartPos - self.indent.length;
+              input.selectionEnd = selStartPos - self.indent.length;
+            }
+          } else {
+            input.value = inputVal.substring(0, selStartPos) + self.indent +
+                          inputVal.substring(selStartPos, input.value.length);
+            input.selectionStart = selStartPos + self.indent.length;
+            input.selectionEnd = selStartPos + self.indent.length;
+          }
 
             highlightCode.innerHTML = input.value.replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
