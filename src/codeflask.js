@@ -33,7 +33,7 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
         initialCode = target.textContent,
         lang;
 
-    if(!opts.enableAutocorrect == true)
+    if(opts && !opts.enableAutocorrect)
     {
         // disable autocorrect and spellcheck features
         textarea.setAttribute('spellcheck', 'false');
@@ -41,10 +41,13 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
         textarea.setAttribute('autocomplete', 'off');
         textarea.setAttribute('autocorrect', 'off');
     }
+  
+    if(opts)
+    {
+      lang = this.handleLanguage(opts.language);
+    }
 
-    opts.language = this.handleLanguage(opts.language);
-
-    this.defaultLanguage = target.dataset.language || opts.language || 'markup';
+    this.defaultLanguage = target.dataset.language || lang || 'markup';
 
 
     // Prevent these vars from being refreshed when rendering multiple
