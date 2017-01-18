@@ -67,6 +67,12 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
     if(/iPad|iPhone|iPod/.test(navigator.platform)) {
         highlightCode.style.paddingLeft = '3px';
     }
+    
+    // If RTL add the text-align attribute
+    if(opts.rtl == true){
+      textarea.style.textAlign = 'right'
+      highlightCode.style.textAlign = 'right';
+    }
 
     // Appending editor elements to DOM
     target.innerHTML = '';

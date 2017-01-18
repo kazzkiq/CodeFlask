@@ -104,6 +104,16 @@ flask.run('#my-editor');
 flask.update("<button>Heeeey, whats up?</button>");
 ```
 
+#### Configuring right-to-left
+
+If you would like CodeFlask to start in the right to left configuration, pass 'true' to the 'rtl' parameter as shown below:
+
+```javascript
+...
+const flask = new CodeFlask;
+flask.run('#editor', {language: 'javascript', rtl: true}) // add rlt functionality
+```
+
 #### Loading multiple editors
 
 If you have a lot of editors on your page you can load them all by using `.runAll()` instead of `.run()`:
