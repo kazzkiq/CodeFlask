@@ -24,6 +24,35 @@ CodeFlask.prototype.runAll = function(selector, opts) {
     for(i=0; i < target.length; i++) {
         this.scaffold(target[i], true, opts);
     }
+    
+    // Add the MutationObserver below for each one of the textAreas so we can listen
+    // to when the dir attribute has been changed and also return the placeholder
+    // dir attribute with it so it reflects the changes made to the textarea.
+    var textAreas = document.getElementsByClassName("CodeFlask__textarea");
+    for(var i = 0; i < textAreas.length; i++)
+    {
+      window.MutationObserver = window.MutationObserver
+         || window.WebKitMutationObserver
+         || window.MozMutationObserver;
+
+      var target = textAreas[i];
+
+      observer = new MutationObserver(function(mutation) {
+        var textAreas = document.getElementsByClassName("CodeFlask__textarea");
+          for(var i = 0; i < textAreas.length; i++)
+           {
+            // If the text direction values are different set them
+            if(textAreas[i].nextSibling.getAttribute("dir") != textAreas[i].getAttribute("dir")){
+                textAreas[i].nextSibling.setAttribute("dir", textAreas[i].getAttribute("dir"));
+            }
+           }
+      }),
+      config = {
+         attributes: true,
+         attributeFilter : ['dir']
+      };
+      observer.observe(target, config);
+    }
 }
 
 CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
@@ -71,19 +100,9 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
     // If RTL add the text-align attribute
     if(opts.rtl == true){
         textarea.setAttribute("dir", "rtl")
-        highlightCode.setAttribute("dir", "rtl")
+        highlightPre.setAttribute("dir", "rtl")
     }
     
-    // Add the text direction listener
-    var observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutationRecord) {
-        console.log('style changed!');
-      });    
-    });
-
-    var target = document.getElementById('code');
-    observer.observe(target, { attributes : true, attributeFilter : ['style'] });
-
     // Appending editor elements to DOM
     target.innerHTML = '';
     target.appendChild(textarea);
