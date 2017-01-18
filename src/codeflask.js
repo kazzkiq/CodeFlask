@@ -70,9 +70,19 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
     
     // If RTL add the text-align attribute
     if(opts.rtl == true){
-      textarea.style.textAlign = 'right'
-      highlightCode.style.textAlign = 'right';
+        textarea.setAttribute("dir", "rtl")
+        highlightCode.setAttribute("dir", "rtl")
     }
+    
+    // Add the text direction listener
+    var observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutationRecord) {
+        console.log('style changed!');
+      });    
+    });
+
+    var target = document.getElementById('code');
+    observer.observe(target, { attributes : true, attributeFilter : ['style'] });
 
     // Appending editor elements to DOM
     target.innerHTML = '';
