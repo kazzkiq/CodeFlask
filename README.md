@@ -40,6 +40,8 @@ Or download them manually if you want to.
 
 In order to use CodeFlask.js you need also import [Prism.js](https://github.com/PrismJS/prism) (for code highlight) into your project. Prism basically uses two files, an `.js` file and an `.css` one (where you can theme the code syntax).
 
+To output the line numbers you would also need the [Line Numbers](http://prismjs.com/plugins/line-numbers/) plugin.
+
 After importing Prism, you will need two files from CodeFlask.js also. They are the `codeflask.js` and `codeflask.css`. Both are really small and only with the necessarily to make everything work properly.
 
 Example:
@@ -75,7 +77,7 @@ Alternatively, you can define a language directly on your function call:
 
 ```javascript
 var flask = new CodeFlask;
-flask.run('#my-code-wrapper', { language: 'javascript' })
+flask.run('#my-code-wrapper', { language: 'javascript', lineNumbers: true })
 ```
 
  It is important to remember that CodeFlask.js checks primarily for `data-language` attribute, then for the function call version. If none of those are declared, the editor will render in **HTML syntax**;

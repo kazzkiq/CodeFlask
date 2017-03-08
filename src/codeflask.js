@@ -102,6 +102,12 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
         textarea.setAttribute("dir", "rtl")
         highlightPre.setAttribute("dir", "rtl")
     }
+
+    if(opts.lineNumbers) {
+        highlightPre.classList.add('line-numbers');
+        highlightPre.classList.add('CodeFlask__pre_line-numbers');
+        textarea.classList.add('CodeFlask__textarea_line-numbers')
+    }
     
     // Appending editor elements to DOM
     target.innerHTML = '';

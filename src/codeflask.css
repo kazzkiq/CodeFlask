@@ -51,6 +51,16 @@
     display:block;
 }
 
-.CodeFlask__is-code{
+.CodeFlask__is-code {
     white-space: pre;
+}
+
+.CodeFlask__textarea_line-numbers {
+    width: calc(100% - 3.8em);
+    margin-left: 3.8em;
+    padding-left: 0px !important;
+}
+
+.CodeFlask__pre_line-numbers {
+    padding-left: 3.8em !important;
 }
