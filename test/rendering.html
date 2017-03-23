@@ -41,7 +41,8 @@
         document.querySelector('head').appendChild(styleTag);
 
         flask.run('#code', {
-            language: 'css'
+            language: 'css',
+            lineNumbers: true
         });
 
         flask.onUpdate(function(code) {

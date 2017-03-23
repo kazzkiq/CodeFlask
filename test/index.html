@@ -48,12 +48,23 @@
         <h2>HTML but data-lang="css" (so, CSS)</h2>
         <div class="codeview multiple" data-language="css"></div>
     </div>
+    <div class="code-column">
+      <h2>Running via <code>CodeFlask.run()</code> with line numbers</h2>
+      <h2>JavaScript</h2>
+      <div class="codeview" id="codeWithLineNumbers"></div>
+      <button onclick="updateCodeWithLineNumbers()">Update code content</button>
+    </div>
     <script>
         var flask = new CodeFlask,
             flasks = new CodeFlask;
 
         flask.run('#code', {
             language: 'js'
+        });
+
+        flask.run('#codeWithLineNumbers', {
+            language: 'js',
+            lineNumbers: true
         });
 
         flasks.runAll('.multiple', {
@@ -66,6 +77,10 @@
 
         function updateCode() {
             flask.update('var goo = "stick"');
+        }
+
+        function updateCodeWithLineNumbers() {
+            flask.update('const\n   a = "Hello ",\n   b = a + "World!"\n\nconsole.log(b)');
         }
     </script>
 </body>
