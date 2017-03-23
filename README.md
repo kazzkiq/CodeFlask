@@ -111,7 +111,7 @@ If you would like CodeFlask to start in the right to left configuration, pass 't
 ```javascript
 ...
 const flask = new CodeFlask;
-flask.run('#editor', {language: 'javascript', rtl: true}) // add rlt functionality
+flask.run('#editor', {language: 'javascript', rtl: true}) // add rtl functionality
 ```
 
 #### Loading multiple editors
