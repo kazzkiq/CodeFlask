@@ -143,6 +143,8 @@ CodeFlask.prototype.handleInput = function(textarea, highlightCode, highlightPre
 
     textarea.addEventListener('input', function(e) {
         input = this;
+        
+        input.value = input.value.replace(/\t/g, self.indent);
 
         self.renderOutput(highlightCode, input);
 
