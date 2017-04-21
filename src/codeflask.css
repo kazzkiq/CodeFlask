@@ -4,7 +4,9 @@
 }
 
 .CodeFlask__textarea,
-.CodeFlask__pre{
+.CodeFlask__pre, 
+code[class*="language-"], 
+pre[class*="language-"]{
     box-sizing:border-box;
     position:absolute;
     top:0;
@@ -15,7 +17,7 @@
     font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
     font-size:13px;
     background:transparent;
-    white-space:pre-wrap;
+    white-space:pre-wrap !important;
     line-height:1.5em;
     word-wrap: break-word;
 }
