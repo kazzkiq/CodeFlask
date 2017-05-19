@@ -1,9 +1,14 @@
 function CodeFlask(indent) {
-  this.indent = indent || "    ";
+    this.indent = indent || "    ";
+    this.docroot = document;
+}
+
+CodeFlask.isString = function(x) {
+    return Object.prototype.toString.call(x) === "[object String]";
 }
 
 CodeFlask.prototype.run = function(selector, opts) {
-    var target = document.querySelectorAll(selector);
+    var target = CodeFlask.isString(selector) ? this.docroot.querySelectorAll(selector) : [selector];
 
     if(target.length > 1) {
         throw 'CodeFlask.js ERROR: run() expects only one element, ' +
@@ -18,7 +23,7 @@ CodeFlask.prototype.runAll = function(selector, opts) {
     this.update = null;
     this.onUpdate = null;
 
-    var target = document.querySelectorAll(selector);
+    var target = CodeFlask.isString(selector) ? this.docroot.querySelectorAll(selector) : selector;
 
     var i;
     for(i=0; i < target.length; i++) {
@@ -28,7 +33,7 @@ CodeFlask.prototype.runAll = function(selector, opts) {
     // Add the MutationObserver below for each one of the textAreas so we can listen
     // to when the dir attribute has been changed and also return the placeholder
     // dir attribute with it so it reflects the changes made to the textarea.
-    var textAreas = document.getElementsByClassName("CodeFlask__textarea");
+    var textAreas = this.docroot.getElementsByClassName("CodeFlask__textarea");
     for(var i = 0; i < textAreas.length; i++)
     {
       window.MutationObserver = window.MutationObserver
@@ -38,7 +43,7 @@ CodeFlask.prototype.runAll = function(selector, opts) {
       var target = textAreas[i];
 
       observer = new MutationObserver(function(mutation) {
-        var textAreas = document.getElementsByClassName("CodeFlask__textarea");
+        var textAreas = this.docroot.getElementsByClassName("CodeFlask__textarea");
           for(var i = 0; i < textAreas.length; i++)
            {
             // If the text direction values are different set them
@@ -119,7 +124,7 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
     textarea.value = initialCode;
     this.renderOutput(highlightCode, textarea);
 
-    Prism.highlightAll();
+    this.highlight(highlightCode);
 
     this.handleInput(textarea, highlightCode, highlightPre);
     this.handleScroll(textarea, highlightPre);
@@ -148,7 +153,7 @@ CodeFlask.prototype.handleInput = function(textarea, highlightCode, highlightPre
 
         self.renderOutput(highlightCode, input);
 
-        Prism.highlightAll();
+        self.highlight(highlightCode);
     });
 
     textarea.addEventListener('keydown', function(e) {
@@ -182,7 +187,7 @@ CodeFlask.prototype.handleInput = function(textarea, highlightCode, highlightPre
             highlightCode.innerHTML = input.value.replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;") + "\n";
-            Prism.highlightAll();
+            self.highlight(highlightCode);
         }
     });
 }
@@ -227,8 +232,12 @@ CodeFlask.prototype.update = function(string) {
 
     this.textarea.value = string;
     this.renderOutput(this.highlightCode, this.textarea);
-    Prism.highlightAll();
+    this.highlight(this.highlightCode);
 
     evt.initEvent("input", false, true);
     this.textarea.dispatchEvent(evt);
+}
+
+CodeFlask.prototype.highlight = function(highlightCode) {
+    Prism.highlightElement(highlightCode);
 }

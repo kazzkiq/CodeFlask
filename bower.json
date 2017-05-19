@@ -10,7 +10,7 @@
     "Claudio Holanda"
   ],
   "dependencies": {
-    "prism": "~1.0.1"
+    "prism": "*"
   },
   "description": "A micro code-editor for awesome web pages.",
   "main": [
@@ -20,7 +20,8 @@
   "keywords": [
     "code-editor",
     "plugin",
-    "syntax-highlight"
+    "syntax-highlight",
+    "web-components"
   ],
   "license": "MIT",
   "ignore": [
