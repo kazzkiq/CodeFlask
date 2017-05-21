@@ -14,6 +14,8 @@ It was made as an attempt to create a leaner editor for simple purposes. Just a 
 
 If you want a robust web code editor you can check projects that aim that big, such as CodeMirror.
 
+CodeFlask.js is usable as a Web Component (Custom Elements v1 / Shadow DOM v1).
+
 ## Install
 
 
@@ -81,6 +83,46 @@ flask.run('#my-code-wrapper', { language: 'javascript', lineNumbers: true })
 ```
 
  It is important to remember that CodeFlask.js checks primarily for `data-language` attribute, then for the function call version. If none of those are declared, the editor will render in **HTML syntax**;
+
+#### Usage as a Web Component
+
+Alternatively, you can use the included Web Component wrapper, which uses [Custom Elements v1](https://developers.google.com/web/fundamentals/getting-started/primers/customelements) and [Shadow DOM v1](https://developers.google.com/web/fundamentals/getting-started/primers/shadowdom) to provide the editor as a DOM element.
+
+The element picks up the text provided inside of the element's body, responds to changing the `language` attribute and property, and lets you customize the highlighting colors via CSS Custom Properties:
+
+```html
+<script src="bower_components/prism/prism.js"></script>
+<script src="bower_components/prism/components/prism-markdown.js"></script>
+<link rel="import" href="bower_components/codeflask-editor/src/codeflask-editor.html">
+<style>
+  codeflask-editor {
+    height: 90vh;
+    font-family: cursive;
+    --color-punctuation: lime;
+    --color-important: red;
+  }
+</style>
+<codeflask-editor language="markdown">
+# hello world
+Initial text here.
+</codeflask-editor>
+<script>
+  document.querySelector('codeflask-editor').addEventListener('value-changed', console.log)
+</script>
+```
+
+The element emits a `value-changed` event on content changes, which makes it compatible with [Polymer](https://www.polymer-project.org)'s two-way data binding:
+
+```html
+<codeflask-editor language="{{lang}}" value="{{code}}"></codeflask-editor>
+```
+
+Instead of the HTML Import, you can include the scripts directly:
+
+```html
+<script src="codeflask.js"></script>
+<script src="codeflask-editor.js"></script>
+```
 
 #### Listening for changes and updating your editor
 
