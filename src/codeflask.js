@@ -157,38 +157,83 @@ CodeFlask.prototype.handleInput = function(textarea, highlightCode, highlightPre
     });
 
     textarea.addEventListener('keydown', function(e) {
-        input = this,
-        selStartPos = input.selectionStart,
-        inputVal = input.value;
-        currentLineStart = selStartPos - input.value.substr(0, selStartPos).split("\n").pop().length;
-
         // If tab pressed, indent
         if (e.keyCode === 9) {
-          e.preventDefault();
+            e.preventDefault();
+            var input   = this,
+            selectionDir = input.selectionDirection,
+            selStartPos = input.selectionStart,
+            selEndPos   = input.selectionEnd,
+            inputVal    = input.value;
 
-          // Allow shift-tab
-          if (e.shiftKey) {
-            indentLength = self.indent.length;
+            var beforeSelection = inputVal.substr(0, selStartPos),
+            selectionVal        = inputVal.substring(selStartPos, selEndPos),
+            afterSelection      = inputVal.substring(selEndPos);
 
-            // If the current line begins with the indent, unindent
-            if (inputVal.substring(currentLineStart, currentLineStart + indentLength) == self.indent) {
-              input.value = inputVal.substring(0, currentLineStart) +
-                            inputVal.substring(currentLineStart + indentLength, input.value.length);
-              input.selectionStart = selStartPos - self.indent.length;
-              input.selectionEnd = selStartPos - self.indent.length;
+            if (selStartPos !== selEndPos && selectionVal.length >= self.indent.length) {
+
+
+                var currentLineStart = selStartPos - beforeSelection.split('\n').pop().length,
+                startIndentLen  = self.indent.length,
+                endIndentLen    = self.indent.length;
+
+                //Unindent
+                if (e.shiftKey) {
+                    var currentLineStartStr = inputVal.substr(currentLineStart, self.indent.length);
+                    //Line start whit indent
+                    if (currentLineStartStr === self.indent) {
+
+                        startIndentLen = -startIndentLen;
+
+                        //Indent is in selection
+                        if (currentLineStart > selStartPos) {
+                            selectionVal = selectionVal.substring(0, currentLineStart) + selectionVal.substring(currentLineStart+self.indent.length);
+                            endIndentLen = 0;
+                        }
+                        //Indent is in start of selection
+                        else if (currentLineStart == selStartPos) {
+                            startIndentLen = 0;
+                            endIndentLen = 0;
+                            selectionVal = selectionVal.substring(self.indent.length);
+                        }
+                        //Indent is before selection
+                        else {
+                            endIndentLen = -endIndentLen;
+                            beforeSelection = beforeSelection.substring(0, currentLineStart) + beforeSelection.substring(currentLineStart+self.indent.length);
+                        }
+
+                    }
+                    else{
+                        startIndentLen = 0;
+                        endIndentLen = 0;
+                    }
+
+                    selectionVal = selectionVal.replace(new RegExp('\n'+self.indent.split('').join('\\'), 'g'), '\n');          
+                } 
+                //Indent
+                else {
+                    beforeSelection = beforeSelection.substr(0, currentLineStart)+self.indent+beforeSelection.substring(currentLineStart, selStartPos);
+                    selectionVal = selectionVal.replace(/\n/g, '\n'+self.indent);           
+                }
+
+                //Set new indented value
+                input.value = beforeSelection+selectionVal+afterSelection;
+
+                input.selectionStart        = selStartPos+startIndentLen;
+                input.selectionEnd          = selStartPos+selectionVal.length+endIndentLen;
+                input.selectionDirection    = selectionDir;
+            
             }
-          } else {
-            input.value = inputVal.substring(0, selStartPos) + self.indent +
-                          inputVal.substring(selStartPos, input.value.length);
-            input.selectionStart = selStartPos + self.indent.length;
-            input.selectionEnd = selStartPos + self.indent.length;
-          }
-
-            highlightCode.innerHTML = input.value.replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;") + "\n";
-            self.highlight(highlightCode);
+            else{
+                input.value             = beforeSelection+self.indent+afterSelection;
+                input.selectionStart    = selStartPos+self.indent.length;
+                input.selectionEnd      = selStartPos+self.indent.length;
+            }
+            
+            self.renderOutput(highlightCode, input);
+            Prism.highlightAll();
         }
+
     });
 }
 
