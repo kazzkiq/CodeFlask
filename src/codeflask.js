@@ -14,7 +14,7 @@ CodeFlask.prototype.run = function(selector, opts) {
         throw 'CodeFlask.js ERROR: run() expects only one element, ' +
         target.length + ' given. Use .runAll() instead.';
     } else {
-        this.scaffold(target[0], false, opts);
+        this.scaffold(target[0], false, opts || {});
     }
 }
 
@@ -24,10 +24,8 @@ CodeFlask.prototype.runAll = function(selector, opts) {
     this.onUpdate = null;
 
     var target = CodeFlask.isString(selector) ? this.docroot.querySelectorAll(selector) : selector;
-
-    var i;
-    for(i=0; i < target.length; i++) {
-        this.scaffold(target[i], true, opts);
+    for(var i = 0; i < target.length; i++) {
+        this.scaffold(target[i], true, opts || {});
     }
     
     // Add the MutationObserver below for each one of the textAreas so we can listen
@@ -64,10 +62,9 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
     var textarea = document.createElement('TEXTAREA'),
         highlightPre = document.createElement('PRE'),
         highlightCode = document.createElement('CODE'),
-        initialCode = target.textContent,
-        lang;
+        initialCode = target.textContent;
 
-    if(opts && !opts.enableAutocorrect)
+    if(!opts.enableAutocorrect)
     {
         // disable autocorrect and spellcheck features
         textarea.setAttribute('spellcheck', 'false');
@@ -76,13 +73,9 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
         textarea.setAttribute('autocorrect', 'off');
     }
   
-    if(opts)
-    {
-      lang = this.handleLanguage(opts.language);
-    }
-
-    this.defaultLanguage = target.dataset.language || lang || 'markup';
-
+    this.defaultLanguage = target.dataset.language ||
+        opts.language && this.handleLanguage(opts.language) ||
+        'markup';
 
     // Prevent these vars from being refreshed when rendering multiple
     // instances
@@ -207,13 +200,9 @@ CodeFlask.prototype.handleScroll = function(textarea, highlightPre) {
 }
 
 CodeFlask.prototype.handleLanguage = function(lang) {
-    if(lang.match(/html|xml|xhtml|svg/)) {
-        return 'markup';
-    } else  if(lang.match(/js/)) {
-        return 'javascript';
-    } else {
-        return lang;
-    }
+    return lang.match(/html|xml|xhtml|svg/) ? 'markup'
+        : lang.match(/js/) ? 'javascript'
+        : lang;
 }
 
 CodeFlask.prototype.onUpdate = function(cb) {
