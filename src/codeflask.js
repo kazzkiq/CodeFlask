@@ -139,12 +139,7 @@ CodeFlask.prototype.renderOutput = function(highlightCode, input) {
 
 CodeFlask.prototype.handleInput = function(textarea, highlightCode, highlightPre) {
     var self = this,
-        input,
-        selStartPos,
-        inputVal,
-        roundedScroll,
-        currentLineStart,
-        indentLength;
+        indentLength = self.indent.length;
 
     textarea.addEventListener('input', function(e) {
         input = this;
@@ -157,51 +152,48 @@ CodeFlask.prototype.handleInput = function(textarea, highlightCode, highlightPre
     });
 
     textarea.addEventListener('keydown', function(e) {
-        input = this,
-        selStartPos = input.selectionStart,
-        inputVal = input.value;
-        currentLineStart = selStartPos - input.value.substr(0, selStartPos).split("\n").pop().length;
-
         // If tab pressed, indent
         if (e.keyCode === 9) {
-          e.preventDefault();
-
-          // Allow shift-tab
-          if (e.shiftKey) {
-            indentLength = self.indent.length;
-
-            // If the current line begins with the indent, unindent
-            if (inputVal.substring(currentLineStart, currentLineStart + indentLength) == self.indent) {
-              input.value = inputVal.substring(0, currentLineStart) +
-                            inputVal.substring(currentLineStart + indentLength, input.value.length);
-              input.selectionStart = selStartPos - self.indent.length;
-              input.selectionEnd = selStartPos - self.indent.length;
+            e.preventDefault();
+            var input = this,
+                selStartPos = input.selectionStart,
+                inputVal = input.value;
+                currentLineStart = selStartPos -
+                    input.value.substr(0, selStartPos).split("\n").pop().length
+                unindent = e.shiftKey
+                amount = unindent ? -indentLength : indentLength;
+            // Allow shift-tab
+            if (unindent) {
+                // If the current line begins with the indent, unindent
+                if (inputVal.substring(currentLineStart,
+                    currentLineStart + indentLength) == self.indent) {
+                    inputVal = inputVal.substring(0, currentLineStart) +
+                        inputVal.substring(currentLineStart + indentLength,
+                            inputVal.length);
+                } else {
+                    amount = 0;
+                }
+            } else {
+                inputVal = inputVal.substring(0, selStartPos) + self.indent +
+                    inputVal.substring(selStartPos, inputVal.length);
             }
-          } else {
-            input.value = inputVal.substring(0, selStartPos) + self.indent +
-                          inputVal.substring(selStartPos, input.value.length);
-            input.selectionStart = selStartPos + self.indent.length;
-            input.selectionEnd = selStartPos + self.indent.length;
-          }
-
-            highlightCode.innerHTML = input.value.replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;") + "\n";
-            self.highlight(highlightCode);
+            if (amount) {
+                input.value = inputVal
+                input.selectionStart = selStartPos + amount;
+                input.selectionEnd = selStartPos + amount;
+                self.update(inputVal)
+            }
         }
     });
 }
 
 CodeFlask.prototype.handleScroll = function(textarea, highlightPre) {
     textarea.addEventListener('scroll', function(){
-
-        roundedScroll = Math.floor(this.scrollTop);
-
+        var roundedScroll = Math.floor(this.scrollTop);
         // Fixes issue of desync text on mouse wheel, fuck Firefox.
         if(navigator.userAgent.toLowerCase().indexOf('firefox') < 0) {
             this.scrollTop = roundedScroll;
         }
-
         highlightPre.style.top = "-" + roundedScroll + "px";
     });
 }
