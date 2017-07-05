@@ -249,6 +249,8 @@ CodeFlask.prototype.update = function(string) {
 }
 
 CodeFlask.prototype.highlight = function(highlightCode) {
+    // Support both globally present Prism.js, and loading from module
+    var Prism = window.Prism || require('prismjs')
     Prism.highlightElement(highlightCode);
 }
 
