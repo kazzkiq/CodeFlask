@@ -202,7 +202,7 @@ CodeFlask.prototype.handleScroll = function(textarea, highlightPre) {
             this.scrollTop = roundedScroll;
         }
 
-        highlightPre.style.top = "-" + roundedScroll + "px";
+        highlightPre.scrollTop = roundedScroll;
     });
 }
 
