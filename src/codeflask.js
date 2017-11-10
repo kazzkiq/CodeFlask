@@ -1,3 +1,13 @@
+(function(global, factory) {
+    if (typeof exports === 'object' && typeof module == "object") { // CommonJS
+        module.exports = factory();
+    } else if (typeof define === 'function' && define.amd) { // AMD
+        define([], factory);
+    } else { // Browser
+        global.CodeFlask = factory();
+    }
+})(this, function() {
+
 function CodeFlask(indent) {
     this.indent = indent || "    ";
     this.docroot = document;
@@ -284,5 +294,10 @@ CodeFlask.prototype.update = function(string) {
 }
 
 CodeFlask.prototype.highlight = function(highlightCode) {
+    // Support both globally present Prism.js, and loading from module
+    var Prism = window.Prism || require('prismjs')
     Prism.highlightElement(highlightCode);
 }
+
+return CodeFlask;
+});

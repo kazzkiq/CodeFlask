@@ -2,7 +2,7 @@
   "name": "codeflask",
   "version": "0.2.0",
   "description": "A micro code-editor for awesome web pages",
-  "main": "index.js",
+  "main": "src/codeflask.js",
   "files": [
     "src/codeflask.css",
     "src/codeflask.js"
