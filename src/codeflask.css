@@ -12,7 +12,7 @@ pre[class*="language-"]{
     top:0;
     left:0;
     width:100%;
-    padding:1rem !important;
+    padding:1rem;
     border:none;
     font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
     font-size:13px;
@@ -66,4 +66,8 @@ pre[class*="language-"]{
 
 .CodeFlask__pre_line-numbers {
     padding-left: 3.8em !important;
+}
+
+.CodeFlask__code_line-numbers {
+    padding: 0 !important;
 }
