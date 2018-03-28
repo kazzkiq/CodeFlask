@@ -121,6 +121,7 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
     if(opts.lineNumbers) {
         highlightPre.classList.add('line-numbers');
         highlightPre.classList.add('CodeFlask__pre_line-numbers');
+        highlightCode.classList.add('CodeFlask__code_line-numbers');
         textarea.classList.add('CodeFlask__textarea_line-numbers')
     }
     
