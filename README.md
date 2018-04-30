@@ -17,7 +17,7 @@ The goals of this new version are:
 - [x] Create a default theme for CodeFlask independent from default Prism.js one.
 - [ ] Add line numbers support out of the box (without the need of plugins);
 - [ ] (If possible) make code even smaller;
-- [ ] Enable importing of language support on the fly (`flask.addLanguage()`, etc);
+- [x] Enable importing of language support on the fly (`flask.addLanguage()`, etc);
 - [x] Drop support for older browsers;
 - [x] Drop support for Bower;
 - [x] Drop support for `.runAll()`;

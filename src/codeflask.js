@@ -202,6 +202,10 @@ export default class CodeFlask {
     this.highlight();
   }
 
+  addLanguage(name, options) {
+    Prism.languages[name] = options;
+  }
+
   populateDefault() {
     this.updateCode(this.code);
   }
