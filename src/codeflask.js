@@ -1,6 +1,6 @@
 import { editor_css } from './styles/editor';
 import { inject_css } from './styles/injector';
-import { default_css_theme } from './styles/theme-default';
+import { default_css_theme, FONT_SIZE } from './styles/theme-default';
 import { escape_html } from './utils/html-escape';
 import Prism from 'prismjs';
 
@@ -108,7 +108,7 @@ export default class CodeFlask {
   listenTextarea() {
     this.elTextarea.addEventListener('input', (e) => {
       this.code = e.target.value;
-      this.elCode.innerText = e.target.value;
+      this.elCode.innerHTML = escape_html(e.target.value);
       this.highlight();
       setTimeout(this.runUpdate, 1);
     });
@@ -120,8 +120,7 @@ export default class CodeFlask {
     });
 
     this.elTextarea.addEventListener('scroll', (e) => {
-      this.elPre.scrollTop = e.target.scrollTop;
-      this.elPre.scrollLeft = e.target.scrollLeft;
+      this.elPre.style.transform = `translate3d(-${e.target.scrollLeft}px, -${e.target.scrollTop}px, 0)`;
     });
   }
 
@@ -171,7 +170,9 @@ export default class CodeFlask {
   handleNewLineIndentation(e) {
     if (e.keyCode !== 13) {
       return;
-    }
+    };
+
+    this.elCode.style.paddingBottom = +FONT_SIZE.replace('px', '') * 2 + 'px';
   }
 
   closeCharacter(closeChar) {
@@ -186,7 +187,7 @@ export default class CodeFlask {
   updateCode(newCode) {
     this.code = newCode;
     this.elTextarea.value = newCode;
-    this.elCode.innerText = newCode;
+    this.elCode.innerHTML = escape_html(newCode);
     this.highlight();
     setTimeout(this.runUpdate, 1);
   }
@@ -200,12 +201,12 @@ export default class CodeFlask {
   }
 
   populateDefault() {
-    this.code = this.editorRoot.innerText;
+    this.code = this.editorRoot.innerHTML;
     this.updateCode(this.code);
   }
 
   highlight() {
-    Prism.highlightElement(this.elCode);
+    Prism.highlightElement(this.elCode, false);
   }
 
   onUpdate(callback) {
@@ -218,7 +219,6 @@ export default class CodeFlask {
   }
 
   runUpdate() {
-    console.log(1);
     if (this.updateCallBack) {
       this.updateCallBack(this.code);
     }

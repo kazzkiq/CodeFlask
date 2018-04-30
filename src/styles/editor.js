@@ -1,6 +1,6 @@
-import { BACKGROUND_COLOR, LINE_HEIGHT } from './theme-default';
+import { BACKGROUND_COLOR, LINE_HEIGHT, FONT_SIZE } from './theme-default';
 
-const FONT_FAMILY = `'Cousine', monospace;`;
+const FONT_FAMILY = `"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace`;
 const COLOR = (CSS.supports('caret-color', '#000')) ? BACKGROUND_COLOR : '#ccc';
 
 
@@ -10,6 +10,7 @@ export const editor_css = `
     min-width: 500px;
     min-height: 400px;
     border: 1px solid #ccc;
+    overflow: hidden;
   }
 
   .codeflask, .codeflask * {
@@ -31,6 +32,7 @@ export const editor_css = `
     -webkit-appearance: pre;
     caret-color: #111;
     z-index: 2;
+    height: 100%;
   }
 
   .codeflask__code {
@@ -40,14 +42,13 @@ export const editor_css = `
 
   .codeflask__flatten {
     padding: 10px;
-    font-size: 12px;
+    font-size: ${FONT_SIZE};
     line-height: ${LINE_HEIGHT};
     white-space: pre;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
     overflow: auto;
     margin: 0 !important;
     outline: none;
