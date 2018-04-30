@@ -1,4 +1,7 @@
+import { BACKGROUND_COLOR } from './theme-default';
+
 const FONT_FAMILY = `'Cousine', monospace;`;
+const COLOR = (CSS.supports('caret-color', '#000')) ? BACKGROUND_COLOR : '#ccc';
 
 
 export const editor_css = `
@@ -21,11 +24,12 @@ export const editor_css = `
   .codeflask__textarea {
     background: none;
     border: none;
-    color: #ccc;
+    color: ${COLOR};
     z-index: 1;
     resize: none;
     font-family: ${FONT_FAMILY};
     -webkit-appearance: pre;
+    caret-color: #111;
   }
 
   .codeflask__code {

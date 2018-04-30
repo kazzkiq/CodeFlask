@@ -57,7 +57,7 @@ export default class CodeFlask {
     this.runOptions();
     this.listenTextarea();
     this.populateDefault();
-    this.highlight();
+    this.updateCode(this.code);
   }
 
   createWrapper() {
@@ -68,8 +68,6 @@ export default class CodeFlask {
   createTextarea() {
     this.elTextarea = this.createElement('textarea', this.elWrapper);
     this.elTextarea.classList.add('codeflask__textarea', 'codeflask__flatten');
-    this.elTextarea.value = 'let it = "go";';
-    this.code = this.elTextarea.value;
   }
 
   createPre() {
@@ -200,7 +198,7 @@ export default class CodeFlask {
   }
 
   populateDefault() {
-    this.code = this.elTextarea.value;
+    this.code = this.editorRoot.innerText.trim();
     this.updateCode(this.code);
   }
 
