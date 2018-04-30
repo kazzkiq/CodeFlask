@@ -110,6 +110,7 @@ export default class CodeFlask {
       this.code = e.target.value;
       this.elCode.innerText = e.target.value;
       this.highlight();
+      setTimeout(this.runUpdate, 1);
     });
 
     this.elTextarea.addEventListener('keydown', (e) => {
@@ -187,6 +188,7 @@ export default class CodeFlask {
     this.elTextarea.value = newCode;
     this.elCode.innerText = newCode;
     this.highlight();
+    setTimeout(this.runUpdate, 1);
   }
 
   updateLanguage(newLanguage) {
@@ -198,11 +200,27 @@ export default class CodeFlask {
   }
 
   populateDefault() {
-    this.code = this.editorRoot.innerText.trim();
+    this.code = this.editorRoot.innerText;
     this.updateCode(this.code);
   }
 
   highlight() {
     Prism.highlightElement(this.elCode);
+  }
+
+  onUpdate(callback) {
+    if (functionToCheck && {}.toString.call(functionToCheck) !== '[object Function]') {
+      throw Error('CodeFlask expects callback of type Function');
+      return;
+    }
+
+    this.updateCallBack = callback;
+  }
+
+  runUpdate() {
+    console.log(1);
+    if (this.updateCallBack) {
+      this.updateCallBack(this.code);
+    }
   }
 }
