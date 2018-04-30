@@ -1,4 +1,5 @@
 export const BACKGROUND_COLOR = '#fff';
+export const LINE_HEIGHT = '20px';
 
 export const default_css_theme = `
 .codeflask .token.punctuation {
