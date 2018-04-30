@@ -1,10 +1,12 @@
+export const BACKGROUND_COLOR = '#fff';
+
 export const default_css_theme = `
 .codeflask .token.punctuation {
   color: #0C63FF;
 }
 
 .codeflask {
-  background: #fff;
+  background: ${BACKGROUND_COLOR};
 }
 
 .codeflask .token.keyword {
