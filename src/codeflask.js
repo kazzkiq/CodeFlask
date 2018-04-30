@@ -19,6 +19,7 @@ CodeFlask.isString = function(x) {
 
 CodeFlask.prototype.run = function(selector, opts) {
     var target = CodeFlask.isString(selector) ? this.docroot.querySelectorAll(selector) : [selector];
+    opts = opts || {};
 
     if(target.length > 1) {
         throw 'CodeFlask.js ERROR: run() expects only one element, ' +
@@ -88,7 +89,7 @@ CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
   
     if(opts)
     {
-      lang = this.handleLanguage(opts.language);
+      lang = this.handleLanguage(opts.language || 'html');
     }
 
     this.defaultLanguage = target.dataset.language || lang || 'markup';
