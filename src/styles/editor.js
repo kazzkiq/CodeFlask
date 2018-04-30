@@ -20,6 +20,7 @@ export const editor_css = `
   .codeflask__pre {
     pointer-events: none;
     z-index: 3;
+    overflow: hidden;
   }
 
   .codeflask__textarea {
@@ -32,12 +33,14 @@ export const editor_css = `
     -webkit-appearance: pre;
     caret-color: #111;
     z-index: 2;
+    width: 100%;
     height: 100%;
   }
 
   .codeflask__code {
     display: block;
     font-family: ${FONT_FAMILY};
+    overflow: hidden;
   }
 
   .codeflask__flatten {
@@ -48,7 +51,6 @@ export const editor_css = `
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
     overflow: auto;
     margin: 0 !important;
     outline: none;

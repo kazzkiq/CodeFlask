@@ -61,6 +61,8 @@ export default class CodeFlask {
   }
 
   createWrapper() {
+    this.code = this.editorRoot.innerHTML;
+    this.editorRoot.innerHTML = '';
     this.elWrapper = this.createElement('div', this.editorRoot);
     this.elWrapper.classList.add('codeflask');
   }
@@ -201,7 +203,6 @@ export default class CodeFlask {
   }
 
   populateDefault() {
-    this.code = this.editorRoot.innerHTML;
     this.updateCode(this.code);
   }
 
