@@ -1,16 +1,25 @@
 {
   "name": "codeflask",
-  "version": "0.3.1",
+  "version": "1.0.0",
   "description": "A micro code-editor for awesome web pages",
   "main": "src/codeflask.js",
   "files": [
     "src/codeflask.css",
     "src/codeflask.js"
   ],
-  "dependencies": {
-    "prismjs": "^1.6.0"
+  "devDependencies": {
+    "rollup": "^0.58.1",
+    "rollup-plugin-buble": "^0.19.2",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-node-resolve": "^3.0.3",
+    "rollup-plugin-uglify": "^3.0.0",
+    "serve": "^6.5.1"
   },
-  "devDependencies": {},
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "serve build & rollup -c -w",
+    "start": "serve public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kazzkiq/CodeFlask.js.git"
@@ -26,5 +35,8 @@
   "bugs": {
     "url": "https://github.com/kazzkiq/CodeFlask.js/issues"
   },
-  "homepage": "https://kazzkiq.github.io/CodeFlask.js/"
+  "homepage": "https://kazzkiq.github.io/CodeFlask.js/",
+  "dependencies": {
+    "prismjs": "^1.14.0"
+  }
 }

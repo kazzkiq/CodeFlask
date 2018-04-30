@@ -1,305 +1,210 @@
-(function(global, factory) {
-    if (typeof exports === 'object' && typeof module == "object") { // CommonJS
-        module.exports = factory();
-    } else if (typeof define === 'function' && define.amd) { // AMD
-        define([], factory);
-    } else { // Browser
-        global.CodeFlask = factory();
+import { editor_css } from './styles/editor';
+import { inject_css } from './styles/injector';
+import { default_css_theme } from './styles/theme-default';
+import { escape_html } from './utils/html-escape';
+import Prism from 'prismjs';
+
+export default class CodeFlask {
+  constructor(selectorOrElement, opts) {
+    if (!selectorOrElement) {
+      // If no selector or element is passed to CodeFlask,
+      // stop execution and throw error.
+      throw Error('CodeFlask expects a parameter which is Element or a String selector');
+      return;
     }
-})(this, function() {
 
-function CodeFlask(indent) {
-    this.indent = indent || "    ";
-    this.docroot = document;
-}
+    if (!opts) {
+      // If no selector or element is passed to CodeFlask,
+      // stop execution and throw error.
+      throw Error('CodeFlask expects an object containing options as second parameter');
+      return;
+    }
 
-CodeFlask.isString = function(x) {
-    return Object.prototype.toString.call(x) === "[object String]";
-}
-
-CodeFlask.prototype.run = function(selector, opts) {
-    var target = CodeFlask.isString(selector) ? this.docroot.querySelectorAll(selector) : [selector];
-    opts = opts || {};
-
-    if(target.length > 1) {
-        throw 'CodeFlask.js ERROR: run() expects only one element, ' +
-        target.length + ' given. Use .runAll() instead.';
+    if (selectorOrElement.nodeType) {
+      // If it is an element, assign it directly
+      this.editorRoot = selectorOrElement;
     } else {
-        this.scaffold(target[0], false, opts);
+      // If it is a selector, tries to find element
+      const editorRoot = document.querySelector(selectorOrElement);
+
+      // If an element is found using this selector,
+      // assign this element as the root element
+      if (editorRoot) {
+        this.editorRoot = editorRoot;
+      }
     }
-}
 
-CodeFlask.prototype.runAll = function(selector, opts) {
-    // Remove update API for bulk rendering
-    this.update = null;
-    this.onUpdate = null;
+    this.opts = opts;
+    this.startEditor();
+  }
 
-    var target = CodeFlask.isString(selector) ? this.docroot.querySelectorAll(selector) : selector;
-
-    var i;
-    for(i=0; i < target.length; i++) {
-        this.scaffold(target[i], true, opts);
-    }
+  startEditor() {
+    const isCSSInjected = inject_css(editor_css);
+    const isThemeCSSInjected = inject_css(default_css_theme, 'theme-default');
     
-    // Add the MutationObserver below for each one of the textAreas so we can listen
-    // to when the dir attribute has been changed and also return the placeholder
-    // dir attribute with it so it reflects the changes made to the textarea.
-    var textAreas = this.docroot.getElementsByClassName("CodeFlask__textarea");
-    for(var i = 0; i < textAreas.length; i++)
-    {
-      window.MutationObserver = window.MutationObserver
-         || window.WebKitMutationObserver
-         || window.MozMutationObserver;
-
-      var target = textAreas[i];
-
-      observer = new MutationObserver(function(mutation) {
-        var textAreas = this.docroot.getElementsByClassName("CodeFlask__textarea");
-          for(var i = 0; i < textAreas.length; i++)
-           {
-            // If the text direction values are different set them
-            if(textAreas[i].nextSibling.getAttribute("dir") != textAreas[i].getAttribute("dir")){
-                textAreas[i].nextSibling.setAttribute("dir", textAreas[i].getAttribute("dir"));
-            }
-           }
-      }),
-      config = {
-         attributes: true,
-         attributeFilter : ['dir']
-      };
-      observer.observe(target, config);
-    }
-}
-
-CodeFlask.prototype.scaffold = function(target, isMultiple, opts) {
-    var textarea = document.createElement('TEXTAREA'),
-        highlightPre = document.createElement('PRE'),
-        highlightCode = document.createElement('CODE'),
-        initialCode = target.textContent,
-        lang;
-
-    if(opts && !opts.enableAutocorrect)
-    {
-        // disable autocorrect and spellcheck features
-        textarea.setAttribute('spellcheck', 'false');
-        textarea.setAttribute('autocapitalize', 'off');
-        textarea.setAttribute('autocomplete', 'off');
-        textarea.setAttribute('autocorrect', 'off');
-    }
-  
-    if(opts)
-    {
-      lang = this.handleLanguage(opts.language || 'html');
+    if (!isCSSInjected || !isThemeCSSInjected) {
+      throw Error('Failed to inject CodeFlask CSS.');
+      return;
     }
 
-    this.defaultLanguage = target.dataset.language || lang || 'markup';
+    // The order matters (pre > code). Don't change it
+    // or things are going to break.
+    this.createWrapper();
+    this.createTextarea();
+    this.createPre();
+    this.createCode();
 
+    this.runOptions();
+    this.listenTextarea();
+    this.populateDefault();
+    this.highlight();
+  }
 
-    // Prevent these vars from being refreshed when rendering multiple
-    // instances
-    if(!isMultiple) {
-        this.textarea = textarea;
-        this.highlightCode = highlightCode;
+  createWrapper() {
+    this.elWrapper = this.createElement('div', this.editorRoot);
+    this.elWrapper.classList.add('codeflask');
+  }
+
+  createTextarea() {
+    this.elTextarea = this.createElement('textarea', this.elWrapper);
+    this.elTextarea.classList.add('codeflask__textarea', 'codeflask__flatten');
+    this.elTextarea.value = 'let it = "go";';
+    this.code = this.elTextarea.value;
+  }
+
+  createPre() {
+    this.elPre = this.createElement('pre', this.elWrapper);
+    this.elPre.classList.add('codeflask__pre', 'codeflask__flatten');
+  }
+
+  createCode() {
+    this.elCode = this.createElement('code', this.elPre);
+    this.elCode.classList.add('codeflask__code', `language-${this.opts.language || 'html'}`);
+  }
+
+  createElement(elementTag, whereToAppend) {
+    const element = document.createElement(elementTag);
+    whereToAppend.appendChild(element);
+
+    return element;
+  }
+
+  runOptions() {
+    this.opts.rtl = this.opts.rtl || false;
+    this.opts.tabSize = this.opts.tabSize || 2;
+    this.opts.enableAutocorrect = this.opts.enableAutocorrect || false;
+
+    if (this.opts.rtl === true) {
+      this.elTextarea.setAttribute('dir', 'rtl');
+      this.elPre.setAttribute('dir', 'rtl');
     }
 
-    target.classList.add('CodeFlask');
-    textarea.classList.add('CodeFlask__textarea');
-    highlightPre.classList.add('CodeFlask__pre');
-    highlightCode.classList.add('CodeFlask__code');
-    highlightCode.classList.add('language-' + this.defaultLanguage);
-
-    // Fixing iOS "drunk-text" issue
-    if(/iPad|iPhone|iPod/.test(navigator.platform)) {
-        highlightCode.style.paddingLeft = '3px';
+    if (this.opts.enableAutocorrect === false) {
+      this.elTextarea.setAttribute('spellcheck', 'false');
+      this.elTextarea.setAttribute('autocapitalize', 'off');
+      this.elTextarea.setAttribute('autocomplete', 'off');
+      this.elTextarea.setAttribute('autocorrect', 'off');
     }
-    
-    // If RTL add the text-align attribute
-    if(opts.rtl == true){
-        textarea.setAttribute("dir", "rtl")
-        highlightPre.setAttribute("dir", "rtl")
-    }
+  }
 
-    if(opts.lineNumbers) {
-        highlightPre.classList.add('line-numbers');
-        highlightPre.classList.add('CodeFlask__pre_line-numbers');
-        highlightCode.classList.add('CodeFlask__code_line-numbers');
-        textarea.classList.add('CodeFlask__textarea_line-numbers')
-    }
-    
-    // Appending editor elements to DOM
-    target.innerHTML = '';
-    target.appendChild(textarea);
-    target.appendChild(highlightPre);
-    highlightPre.appendChild(highlightCode);
-
-    // Render initial code inside tag
-    textarea.value = initialCode;
-    this.renderOutput(highlightCode, textarea);
-
-    this.highlight(highlightCode);
-
-    this.handleInput(textarea, highlightCode, highlightPre);
-    this.handleScroll(textarea, highlightPre);
-
-}
-
-CodeFlask.prototype.renderOutput = function(highlightCode, input) {
-    highlightCode.innerHTML = input.value.replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;") + "\n";
-}
-
-CodeFlask.prototype.handleInput = function(textarea, highlightCode, highlightPre) {
-    var self = this,
-        input,
-        selStartPos,
-        inputVal,
-        roundedScroll,
-        currentLineStart,
-        indentLength;
-
-    textarea.addEventListener('input', function(e) {
-        input = this;
-        
-        input.value = input.value.replace(/\t/g, self.indent);
-
-        self.renderOutput(highlightCode, input);
-
-        self.highlight(highlightCode);
+  listenTextarea() {
+    this.elTextarea.addEventListener('input', (e) => {
+      this.code = e.target.value;
+      this.elCode.innerText = e.target.value;
+      this.highlight();
     });
 
-    textarea.addEventListener('keydown', function(e) {
-        // If tab pressed, indent
-        if (e.keyCode === 9) {
-            e.preventDefault();
-            var input   = this,
-            selectionDir = input.selectionDirection,
-            selStartPos = input.selectionStart,
-            selEndPos   = input.selectionEnd,
-            inputVal    = input.value;
-
-            var beforeSelection = inputVal.substr(0, selStartPos),
-            selectionVal        = inputVal.substring(selStartPos, selEndPos),
-            afterSelection      = inputVal.substring(selEndPos);
-
-            if (selStartPos !== selEndPos && selectionVal.length >= self.indent.length) {
-
-
-                var currentLineStart = selStartPos - beforeSelection.split('\n').pop().length,
-                startIndentLen  = self.indent.length,
-                endIndentLen    = self.indent.length;
-
-                //Unindent
-                if (e.shiftKey) {
-                    var currentLineStartStr = inputVal.substr(currentLineStart, self.indent.length);
-                    //Line start whit indent
-                    if (currentLineStartStr === self.indent) {
-
-                        startIndentLen = -startIndentLen;
-
-                        //Indent is in selection
-                        if (currentLineStart > selStartPos) {
-                            selectionVal = selectionVal.substring(0, currentLineStart) + selectionVal.substring(currentLineStart+self.indent.length);
-                            endIndentLen = 0;
-                        }
-                        //Indent is in start of selection
-                        else if (currentLineStart == selStartPos) {
-                            startIndentLen = 0;
-                            endIndentLen = 0;
-                            selectionVal = selectionVal.substring(self.indent.length);
-                        }
-                        //Indent is before selection
-                        else {
-                            endIndentLen = -endIndentLen;
-                            beforeSelection = beforeSelection.substring(0, currentLineStart) + beforeSelection.substring(currentLineStart+self.indent.length);
-                        }
-
-                    }
-                    else{
-                        startIndentLen = 0;
-                        endIndentLen = 0;
-                    }
-
-                    selectionVal = selectionVal.replace(new RegExp('\n'+self.indent.split('').join('\\'), 'g'), '\n');          
-                } 
-                //Indent
-                else {
-                    beforeSelection = beforeSelection.substr(0, currentLineStart)+self.indent+beforeSelection.substring(currentLineStart, selStartPos);
-                    selectionVal = selectionVal.replace(/\n/g, '\n'+self.indent);           
-                }
-
-                //Set new indented value
-                input.value = beforeSelection+selectionVal+afterSelection;
-
-                input.selectionStart        = selStartPos+startIndentLen;
-                input.selectionEnd          = selStartPos+selectionVal.length+endIndentLen;
-                input.selectionDirection    = selectionDir;
-            
-            }
-            else{
-                input.value             = beforeSelection+self.indent+afterSelection;
-                input.selectionStart    = selStartPos+self.indent.length;
-                input.selectionEnd      = selStartPos+self.indent.length;
-            }
-            
-            self.renderOutput(highlightCode, input);
-            Prism.highlightAll();
-        }
-
+    this.elTextarea.addEventListener('keydown', (e) => {
+      this.handleTabs(e);
+      this.handleSelfClosingCharacters(e);
+      this.handleNewLineIndentation(e);
     });
-}
 
-CodeFlask.prototype.handleScroll = function(textarea, highlightPre) {
-    textarea.addEventListener('scroll', function(){
-
-        roundedScroll = Math.floor(this.scrollTop);
-
-        // Fixes issue of desync text on mouse wheel, fuck Firefox.
-        if(navigator.userAgent.toLowerCase().indexOf('firefox') < 0) {
-            this.scrollTop = roundedScroll;
-        }
-
-        highlightPre.scrollTop = roundedScroll;
+    this.elTextarea.addEventListener('scroll', (e) => {
+      this.elPre.scrollTop = e.target.scrollTop;
+      this.elPre.scrollLeft = e.target.scrollLeft;
     });
-}
+  }
 
-CodeFlask.prototype.handleLanguage = function(lang) {
-    if(lang.match(/html|xml|xhtml|svg/)) {
-        return 'markup';
-    } else  if(lang.match(/js/)) {
-        return 'javascript';
-    } else {
-        return lang;
+  handleTabs(e) {
+    if (e.keyCode !== 9) {
+      return;
     }
-}
+    e.preventDefault();
 
-CodeFlask.prototype.onUpdate = function(cb) {
-    if(typeof(cb) == "function") {
-        this.textarea.addEventListener('input', function(e) {
-            cb(this.value);
-        });
-    }else{
-        throw 'CodeFlask.js ERROR: onUpdate() expects function, ' +
-        typeof(cb) + ' given instead.';
+    const tabCode = 9;
+    const pressedCode = e.keyCode;
+    const selectionStart = this.elTextarea.selectionStart;
+    const selectionEnd = this.elTextarea.selectionEnd;
+    const newCode = `${this.code.substring(0, selectionStart)}${' '.repeat(this.opts.tabSize)}${this.code.substring(selectionEnd)}`;
+
+    this.updateCode(newCode);
+    this.elTextarea.selectionEnd = selectionEnd + this.opts.tabSize;
+  }
+
+  handleSelfClosingCharacters(e) {
+    const openChars = ['(', '[', '{', '<'];
+    const key = e.key;
+
+    if (!openChars.includes(key)) {
+      return;
     }
+
+    switch(key) {
+      case '(':
+      this.closeCharacter(')');
+      break;
+
+      case '[':
+      this.closeCharacter(']');
+      break;
+
+      case '{':
+      this.closeCharacter('}');
+      break;
+
+      case '<':
+      this.closeCharacter('>');
+      break;
+    }
+  }
+
+  handleNewLineIndentation(e) {
+    if (e.keyCode !== 13) {
+      return;
+    }
+  }
+
+  closeCharacter(closeChar) {
+    const selectionStart = this.elTextarea.selectionStart;
+    const selectionEnd = this.elTextarea.selectionEnd;
+    const newCode = `${this.code.substring(0, selectionStart)}${closeChar}${this.code.substring(selectionEnd)}`;
+
+    this.updateCode(newCode);
+    this.elTextarea.selectionEnd = selectionEnd;
+  }
+
+  updateCode(newCode) {
+    this.code = newCode;
+    this.elTextarea.value = newCode;
+    this.elCode.innerText = newCode;
+    this.highlight();
+  }
+
+  updateLanguage(newLanguage) {
+    const oldLanguage = this.opts.language;
+    this.elCode.classList.remove(`language-${oldLanguage}`);
+    this.elCode.classList.add(`language-${newLanguage}`);
+    this.opts.language = newLanguage;
+    this.highlight();
+  }
+
+  populateDefault() {
+    this.code = this.elTextarea.value;
+    this.updateCode(this.code);
+  }
+
+  highlight() {
+    Prism.highlightElement(this.elCode);
+  }
 }
-
-CodeFlask.prototype.update = function(string) {
-    var evt = document.createEvent("HTMLEvents");
-
-    this.textarea.value = string;
-    this.renderOutput(this.highlightCode, this.textarea);
-    this.highlight(this.highlightCode);
-
-    evt.initEvent("input", false, true);
-    this.textarea.dispatchEvent(evt);
-}
-
-CodeFlask.prototype.highlight = function(highlightCode) {
-    // Support both globally present Prism.js, and loading from module
-    var Prism = window.Prism || require('prismjs')
-    Prism.highlightElement(highlightCode);
-}
-
-return CodeFlask;
-});
