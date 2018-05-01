@@ -3,55 +3,56 @@ export const LINE_HEIGHT = '20px';
 export const FONT_SIZE = '13px';
 
 export const default_css_theme = `
-.codeflask .token.punctuation {
-  color: #0C63FF;
-}
-
 .codeflask {
   background: ${BACKGROUND_COLOR};
+  color: #4f559c;
+}
+
+.codeflask .token.punctuation {
+  color: #4a4a4a;
 }
 
 .codeflask .token.keyword {
-  color: #0C63FF;
+  color: #8500ff;
 }
 
 .codeflask .token.operator {
-  color: #CC0051;
+  color: #ff5598;
 }
 
 .codeflask .token.string {
-  color: #E74C3C;
+  color: #41ad8f;
 }
 
 .codeflask .token.comment {
-  color: #c0c0c0;
+  color: #9badb7;
 }
 
 .codeflask .token.function {
-  color: #AE15CC;
+  color: #8500ff;
 }
 
 .codeflask .token.boolean {
-  color: #AE15CC;
+  color: #8500ff;
 }
 
 .codeflask .token.number {
-  color: #AE15CC;
+  color: #8500ff;
 }
 
 .codeflask .token.selector {
-  color: #0C63FF;
+  color: #8500ff;
 }
 
 .codeflask .token.property {
-  color: #AE15CC;
+  color: #8500ff;
 }
 
 .codeflask .token.tag {
-  color: #0C63FF;
+  color: #8500ff;
 }
 
 .codeflask .token.attr-value {
-  color: #AE15CC;
+  color: #8500ff;
 }
 `;
