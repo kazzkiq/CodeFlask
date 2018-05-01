@@ -21,7 +21,18 @@
 <body>
   <h1>Testing below:</h1>
 
-  <div class="test"></div>
+  <div class="test">// Feel free to play with the code. :)
+
+function Hey(phrase) {
+    phrase = phrase || "Hey";
+    return console.log(phrase);
+}
+
+window.onLoad = function() {
+    Hey();
+    Hey("Jude");
+    Hey("Don't make it bad.");
+}</div>
 
   <script>
     const flask = new CodeFlask('.test', {
