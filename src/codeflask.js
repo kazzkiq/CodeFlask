@@ -174,7 +174,30 @@ export default class CodeFlask {
       return;
     };
 
-    this.elCode.style.paddingBottom = +FONT_SIZE.replace('px', '') * 2 + 'px';
+    // TODO: Make this shit work right
+
+    // const selectionStart = this.elTextarea.selectionStart;
+    // const selectionEnd = this.elTextarea.selectionEnd;
+    // const allLines = this.code.split('\n').length;
+    // const lines = this.code.substring(0, selectionStart).split('\n');
+    // const currentLine = lines.length;
+    // const lastLine = lines[currentLine - 1];
+
+    // console.log(currentLine, allLines);
+
+    // if (lastLine !== undefined && currentLine < allLines) {
+    //   e.preventDefault();
+    //   const spaces = lastLine.match(/^ {1,}/);
+
+    //   if (spaces) {
+    //     console.log(spaces[0].length);
+    //     const newCode = `${this.code.substring(0, selectionStart)}\n${' '.repeat(spaces[0].length)}${this.code.substring(selectionEnd)}`;
+    //     this.updateCode(newCode);
+    //     setTimeout(() => {
+    //       this.elTextarea.selectionEnd = selectionEnd + spaces[0].length + 1;
+    //     }, 0);
+    //   }
+    // }
   }
 
   closeCharacter(closeChar) {
