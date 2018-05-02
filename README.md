@@ -15,8 +15,8 @@ The goals of this new version are:
 - [ ] Improve performance making use of WebWorkers on Prism.js;
 - [x] Embbed Prism as a CodeFlask dependency, so users don't neet to install other things;
 - [x] Create a default theme for CodeFlask independent from default Prism.js one.
-- [ ] Add line numbers support out of the box (without the need of plugins);
-- [ ] (If possible) make code even smaller;
+- [x] Add line numbers support out of the box (without the need of plugins);
+- [ ] ~~(If possible) make code even smaller;~~
 - [x] Enable importing of language support on the fly (`flask.addLanguage()`, etc);
 - [x] Drop support for older browsers;
 - [x] Drop support for Bower;
