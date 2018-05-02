@@ -2,6 +2,7 @@ import { BACKGROUND_COLOR, LINE_HEIGHT, FONT_SIZE } from './theme-default';
 
 const FONT_FAMILY = `"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace`;
 const COLOR = (CSS.supports('caret-color', '#000')) ? BACKGROUND_COLOR : '#ccc';
+const LINE_NUMBER_WIDTH = '40px'
 
 
 export const editor_css = `
@@ -33,7 +34,7 @@ export const editor_css = `
     -webkit-appearance: pre;
     caret-color: #111;
     z-index: 2;
-    width: 100%;
+    width: calc(100% - ${LINE_NUMBER_WIDTH});
     height: 100%;
   }
 
@@ -50,7 +51,7 @@ export const editor_css = `
     white-space: pre;
     position: absolute;
     top: 0;
-    left: 0;
+    left: ${LINE_NUMBER_WIDTH};
     overflow: auto;
     margin: 0 !important;
     outline: none;
@@ -67,8 +68,6 @@ export const editor_css = `
   }
 
   .codeflask__lines {
-    background: #eee;
-    border-right: 1px solid #ccc;
     padding: 10px 4px;
     font-size: 12px;
     line-height: ${LINE_HEIGHT};
@@ -76,9 +75,29 @@ export const editor_css = `
     position: absolute;
     left: 0;
     top: 0;
-    width: 40px;
+    width: ${LINE_NUMBER_WIDTH};
     height: 100%;
     text-align: right;
     color: #999;
+    z-index: 2;
+  }
+
+  .codeflask__lines__line {
+    display: block;
+  }
+
+  .codeflask.codeflask--has-line-numbers {
+    padding-left: ${LINE_NUMBER_WIDTH};
+  }
+
+  .codeflask.codeflask--has-line-numbers:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: ${LINE_NUMBER_WIDTH};
+    height: 100%;
+    background: #eee;
+    z-index: 1;
   }
 `;

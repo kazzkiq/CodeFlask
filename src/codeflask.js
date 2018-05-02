@@ -82,6 +82,12 @@ export default class CodeFlask {
     this.elCode.classList.add('codeflask__code', `language-${this.opts.language || 'html'}`);
   }
 
+  createLineNumbers() {
+    this.elLineNumbers = this.createElement('div', this.elWrapper);
+    this.elLineNumbers.classList.add('codeflask__lines');
+    this.setLineNumber();
+  }
+
   createElement(elementTag, whereToAppend) {
     const element = document.createElement(elementTag);
     whereToAppend.appendChild(element);
@@ -93,6 +99,7 @@ export default class CodeFlask {
     this.opts.rtl = this.opts.rtl || false;
     this.opts.tabSize = this.opts.tabSize || 2;
     this.opts.enableAutocorrect = this.opts.enableAutocorrect || false;
+    this.opts.lineNumbers = this.opts.lineNumbers || false;
 
     if (this.opts.rtl === true) {
       this.elTextarea.setAttribute('dir', 'rtl');
@@ -105,6 +112,21 @@ export default class CodeFlask {
       this.elTextarea.setAttribute('autocomplete', 'off');
       this.elTextarea.setAttribute('autocorrect', 'off');
     }
+
+    if (this.opts.lineNumbers) {
+      this.elWrapper.classList.add('codeflask--has-line-numbers');
+      this.createLineNumbers();
+    }
+  }
+
+  updateLineNumbersCount() {
+    let numberList = '';
+
+    for (let i = 1; i <= this.lineNumber; i++) {
+      numberList = numberList + `<span class="codeflask__lines__line">${i}</span>`;
+    }
+
+    this.elLineNumbers.innerHTML = numberList;
   }
 
   listenTextarea() {
@@ -112,7 +134,11 @@ export default class CodeFlask {
       this.code = e.target.value;
       this.elCode.innerHTML = escape_html(e.target.value);
       this.highlight();
-      setTimeout(this.runUpdate, 1);
+      setTimeout(() => {
+        this.runUpdate();
+        this.setLineNumber();
+      }, 1);
+
     });
 
     this.elTextarea.addEventListener('keydown', (e) => {
@@ -123,6 +149,7 @@ export default class CodeFlask {
 
     this.elTextarea.addEventListener('scroll', (e) => {
       this.elPre.style.transform = `translate3d(-${e.target.scrollLeft}px, -${e.target.scrollTop}px, 0)`;
+      this.elLineNumbers.style.transform = `translate3d(0, -${e.target.scrollTop}px, 0)`;
     });
   }
 
@@ -166,6 +193,15 @@ export default class CodeFlask {
       case '<':
       this.closeCharacter('>');
       break;
+    }
+  }
+
+  setLineNumber() {
+    this.lineNumber = this.code.split('\n').length;
+    console.log(this.lineNumber);
+
+    if (this.opts.lineNumbers) {
+      this.updateLineNumbersCount();
     }
   }
 
