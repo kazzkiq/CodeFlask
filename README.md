@@ -1,6 +1,6 @@
 [![npm version](https://badge.fury.io/js/codeflask.svg)](https://www.npmjs.com/package/codeflask)
 
-# CodeFlask.js
+# CodeFlask
 A micro code-editor for awesome web pages.
 
 ## Version 1.0.0
