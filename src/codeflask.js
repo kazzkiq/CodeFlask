@@ -40,9 +40,8 @@ export default class CodeFlask {
 
   startEditor() {
     const isCSSInjected = inject_css(editor_css);
-    const isThemeCSSInjected = inject_css(default_css_theme, 'theme-default');
     
-    if (!isCSSInjected || !isThemeCSSInjected) {
+    if (!isCSSInjected) {
       throw Error('Failed to inject CodeFlask CSS.');
       return;
     }
@@ -100,6 +99,7 @@ export default class CodeFlask {
     this.opts.tabSize = this.opts.tabSize || 2;
     this.opts.enableAutocorrect = this.opts.enableAutocorrect || false;
     this.opts.lineNumbers = this.opts.lineNumbers || false;
+    this.opts.defaultTheme = this.opts.defaultTheme || true;
 
     if (this.opts.rtl === true) {
       this.elTextarea.setAttribute('dir', 'rtl');
@@ -116,6 +116,10 @@ export default class CodeFlask {
     if (this.opts.lineNumbers) {
       this.elWrapper.classList.add('codeflask--has-line-numbers');
       this.createLineNumbers();
+    }
+
+    if (this.opts.defaultTheme) {
+      inject_css(default_css_theme, 'theme-default');
     }
   }
 
@@ -274,7 +278,7 @@ export default class CodeFlask {
   }
 
   onUpdate(callback) {
-    if (functionToCheck && {}.toString.call(functionToCheck) !== '[object Function]') {
+    if (callback && {}.toString.call(callback) !== '[object Function]') {
       throw Error('CodeFlask expects callback of type Function');
       return;
     }

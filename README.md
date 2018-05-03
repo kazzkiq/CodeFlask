@@ -11,12 +11,12 @@ The goals of this new version are:
 
 - [x] Use ES6/7+ syntax for CodeFlask source code;
 - [x] Generate production files automatically (via Rollup);
-- [ ] Write decent automated tests to prevent things breaking every new release;
-- [ ] Improve performance making use of WebWorkers on Prism.js;
+- [x] Write decent automated tests to prevent things breaking every new release;
+- [ ] Improve performance making use of WebWorkers on Prism.js; (Under discussion);
 - [x] Embbed Prism as a CodeFlask dependency, so users don't neet to install other things;
 - [x] Create a default theme for CodeFlask independent from default Prism.js one.
 - [x] Add line numbers support out of the box (without the need of plugins);
-- [ ] ~~(If possible) make code even smaller;~~
+- [ ] ~~(If possible) make code even smaller;~~ **(Since CodeFlask adds more features, this is impossible)**
 - [x] Enable importing of language support on the fly (`flask.addLanguage()`, etc);
 - [x] Drop support for older browsers;
 - [x] Drop support for Bower;
