@@ -34,6 +34,7 @@ npm install codeflask
 **CDN (provided by [cdnjs](https://github.com/cdnjs/cdnjs)):**
 ```
 https://cdnjs.cloudflare.com/ajax/libs/CodeFlask.js/0.1.1/codeflask.min.js
+https://cdnjs.cloudflare.com/ajax/libs/CodeFlask.js/0.1.1/codeflask.min.css
 ```
 
 Or download them manually if you want to.
