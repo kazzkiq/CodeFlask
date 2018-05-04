@@ -24,3 +24,4 @@ The goals of this new version are:
 - [x] Drop support for `.runAll()`;
 - [x] Add support for autoclosing basic characters;
 ... the list may get bigger.
+
