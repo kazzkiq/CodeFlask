@@ -286,6 +286,10 @@ export default class CodeFlask {
     this.updateCallBack = callback;
   }
 
+  getCode() {
+    return this.code;
+  }
+
   runUpdate() {
     if (this.updateCallBack) {
       this.updateCallBack(this.code);
