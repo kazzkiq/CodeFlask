@@ -9,7 +9,6 @@
   ],
   "devDependencies": {
     "chai": "^4.1.2",
-    "chromedriver": "^2.38.2",
     "express": "^4.16.3",
     "mocha": "^5.1.1",
     "rollup": "^0.58.1",
@@ -17,14 +16,18 @@
     "rollup-plugin-commonjs": "^9.1.0",
     "rollup-plugin-node-resolve": "^3.0.3",
     "rollup-plugin-uglify": "^3.0.0",
-    "selenium-webdriver": "^4.0.0-alpha.1",
-    "serve": "^6.5.1"
+    "serve": "^6.5.1",
+    "wdio-mocha-framework": "^0.5.13",
+    "wdio-phantomjs-service": "^0.2.2",
+    "wdio-spec-reporter": "^0.1.4",
+    "webdriverio": "^4.12.0"
   },
   "scripts": {
     "build": "rollup -c",
     "dev": "serve build & rollup -c -w",
     "start": "serve public",
-    "test": "npm run build && mocha 'test/**/test-*.js'"
+    "pretest": "npm run build",
+    "test": "wdio test/wdio.conf.js"
   },
   "repository": {
     "type": "git",
