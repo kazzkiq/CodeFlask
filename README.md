@@ -1,4 +1,5 @@
 [![npm version](https://badge.fury.io/js/codeflask.svg)](https://www.npmjs.com/package/codeflask)
+[![Build Status](https://travis-ci.org/kazzkiq/CodeFlask.js.svg?branch=master)](https://travis-ci.org/kazzkiq/CodeFlask.js)
 
 # CodeFlask
 A micro code-editor for awesome web pages.
