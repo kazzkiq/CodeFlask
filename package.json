@@ -9,7 +9,7 @@
   ],
   "devDependencies": {
     "chai": "^4.1.2",
-    "express": "^4.16.3",
+    "micro": "^9.3.0",
     "mocha": "^5.1.1",
     "rollup": "^0.58.1",
     "rollup-plugin-buble": "^0.19.2",
