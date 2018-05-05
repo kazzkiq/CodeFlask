@@ -1,11 +1,13 @@
 'use strict'
 
 exports.config = {
+  port: '9515',
+  path: '/',
   specs: [
     './test/e2e/*.js'
   ],
   exclude: [],
-  maxInstances: 2, // it depends on the plan of the cloud servvice
+  maxInstances: 2, // it depends on the plan of the cloud service
   sync: true,
   logLevel: 'error',
   coloredLogs: true,
@@ -19,9 +21,12 @@ exports.config = {
     timeout: 30000
   },
   capabilities: [
-    { browserName: 'phantomjs' }
-    // If you want to use other browsers,
-    // you may need local Selenium standalone server.
+    {
+      browserName: 'chrome',
+      chromeOptions: {
+        args: ['--headless', '--disable-gpu', '--window-size=1280,800']
+      }
+    }
   ],
-  services: ['phantomjs']
+  services: ['chromedriver']
 }

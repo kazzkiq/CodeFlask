@@ -9,6 +9,7 @@
   ],
   "devDependencies": {
     "chai": "^4.1.2",
+    "chromedriver": "^2.38.3",
     "micro": "^9.3.0",
     "mocha": "^5.1.1",
     "rollup": "^0.58.1",
@@ -17,8 +18,8 @@
     "rollup-plugin-node-resolve": "^3.0.3",
     "rollup-plugin-uglify": "^3.0.0",
     "serve": "^6.5.1",
+    "wdio-chromedriver-service": "^0.1.3",
     "wdio-mocha-framework": "^0.5.13",
-    "wdio-phantomjs-service": "^0.2.2",
     "wdio-spec-reporter": "^0.1.4",
     "webdriverio": "^4.12.0"
   },
@@ -26,7 +27,7 @@
     "build": "rollup -c",
     "dev": "serve build & rollup -c -w",
     "start": "serve public",
-    "pretest": "npm run build",
+    "pretest": "npm run build && node test/script-load.js",
     "test": "wdio test/wdio.conf.js"
   },
   "repository": {

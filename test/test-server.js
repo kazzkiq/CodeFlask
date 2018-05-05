@@ -12,10 +12,20 @@ const server = micro(async (req, res) => {
       return fs.readFileSync(__dirname + '/../build/codeflask.min.js', 'utf8');
     break;
 
+    case 'codeflask.min.js':
+      return fs.readFileSync(__dirname + '/../build/codeflask.min.js', 'utf8');
+    break;
+
+    case './codeflask.min.js':
+      return fs.readFileSync(__dirname + '/../build/codeflask.min.js', 'utf8');
+    break;
+
     default: 
       return '404';
     break;
   }
 });
+
+module.exports = server;
 
 server.listen(8888);
