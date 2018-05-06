@@ -1,0 +1,12 @@
+sudo: required
+language: node_js
+node_js:
+  - "lts/*"
+addons:
+  chrome: stable
+deploy:
+  provider: npm
+  email: $NPM_EMAIL
+  api_key: $NPM_TOKEN
+  on:
+    tags: true
