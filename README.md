@@ -1,26 +1,113 @@
 [![npm version](https://badge.fury.io/js/codeflask.svg)](https://www.npmjs.com/package/codeflask)
 [![Build Status](https://travis-ci.org/kazzkiq/CodeFlask.js.svg?branch=master)](https://travis-ci.org/kazzkiq/CodeFlask.js)
 
-# CodeFlask
-A micro code-editor for awesome web pages.
+<p align="center">
+  <img src="logo.png" width="190">
+  # CodeFlask
+  A micro code-editor for awesome web pages.
+</p>
 
-## Version 1.0.0
+<p align="center">
+  <img src="code.png" width="739"> 
+</p>
 
-(WIP)
+## Installation
 
-The goals of this new version are:
+You can install CodeFlask via npm:
 
-- [x] Use ES6/7+ syntax for CodeFlask source code;
-- [x] Generate production files automatically (via Rollup);
-- [x] Write decent automated tests to prevent things breaking every new release;
-- [ ] Improve performance making use of WebWorkers on Prism.js; (Under discussion);
-- [x] Embbed Prism as a CodeFlask dependency, so users don't neet to install other things;
-- [x] Create a default theme for CodeFlask independent from default Prism.js one.
-- [x] Add line numbers support out of the box (without the need of plugins);
-- [ ] ~~(If possible) make code even smaller;~~ **(Since CodeFlask adds more features, this is impossible)**
-- [x] Enable importing of language support on the fly (`flask.addLanguage()`, etc);
-- [x] Drop support for older browsers;
-- [x] Drop support for Bower;
-- [x] Drop support for `.runAll()`;
-- [x] Add support for autoclosing basic characters;
-... the list may get bigger.
+```
+npm install codeflask
+```
+
+Or use it directly in browser via cdn service:
+
+```
+https://unpkg.com/codeflask@1.0.0/build/codeflask.min.js
+```
+
+## Usage
+
+```js
+import CodeFlask from 'codeflask';
+
+const flask = new CodeFlask('#my-selector', { language: 'js' });
+```
+
+### Listening for changes in editor
+
+```js
+flask.onUpdate((code) => {
+  // do something with code here.
+  // this will trigger whenever the code
+  // in the editor changes.
+});
+```
+
+### Updating the editor programatically
+
+```js
+// This will also trigger .onUpdate()
+flask.updateCode('const my_new_code_here = "Blabla"');
+```
+
+### Getting the current code from editor
+
+```js
+flask.getCode();
+```
+
+### Enabling line numbers
+
+```js
+import CodeFlask from 'codeflask';
+
+const flask = new CodeFlask('#my-selector', {
+  language: 'js',
+  lineNumbers: true
+});
+```
+
+### Enabling rtl (right to left writing)
+
+```js
+import CodeFlask from 'codeflask';
+
+const flask = new CodeFlask('#my-selector', {
+  language: 'js',
+  rtl: true
+});
+```
+
+### Adding other languages support:
+
+```js
+flask.addLanguage('ruby', options)
+```
+
+This API is simply a proxy to add a new language to [Prism](http://prismjs.com/) itself (the code highlighter). The `options` parameter must be the same accepted in Prism. You can read more about it [here](http://prismjs.com/extending.html#language-definitions).
+
+By default, CodeFlask comes with support for the following languages (which are default in Prism):
+
+- Markup (HTML/XML);
+- CSS;
+- C-like;
+- JavaScript;
+
+### Adding your own theme to CodeFlask
+
+By default, CodeFlask comes with a simple theme made from scratch called CodeNoon.
+
+You can easily override this theme with your own by writting your own CSS in your own project and disabling CodeFlask default theme thru the `defaultTheme` option:
+
+```js
+import CodeFlask from 'codeflask';
+
+const flask = new CodeFlask('#my-selector', {
+  language: 'js',
+  defaultTheme: false
+});
+```
+
+# Credits & Thanks
+
+CodeFlask.js was made possible by awesome open-source projects such as [Prism.js](https://github.com/PrismJS/prism) and [Rollup](https://github.com/rollup/rollup).
