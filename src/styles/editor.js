@@ -7,10 +7,9 @@ const LINE_NUMBER_WIDTH = '40px'
 
 export const editor_css = `
   .codeflask {
-    position: relative;
-    min-width: 500px;
-    min-height: 400px;
-    border: 1px solid #ccc;
+    position: absolute;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
   }
 
@@ -34,8 +33,12 @@ export const editor_css = `
     -webkit-appearance: pre;
     caret-color: #111;
     z-index: 2;
-    width: calc(100% - ${LINE_NUMBER_WIDTH});
+    width: 100%;
     height: 100%;
+  }
+
+  .codeflask--has-line-numbers .codeflask__textarea {
+    width: calc(100% - ${LINE_NUMBER_WIDTH});
   }
 
   .codeflask__code {
@@ -51,10 +54,16 @@ export const editor_css = `
     white-space: pre;
     position: absolute;
     top: 0;
-    left: ${LINE_NUMBER_WIDTH};
+    left: 0;
     overflow: auto;
     margin: 0 !important;
     outline: none;
+    text-align: left;
+  }
+
+  .codeflask--has-line-numbers .codeflask__flatten {
+    width: calc(100% - ${LINE_NUMBER_WIDTH});
+    left: ${LINE_NUMBER_WIDTH};
   }
 
   .codeflask__line-highlight {
