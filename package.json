@@ -1,6 +1,6 @@
 {
   "name": "codeflask",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A micro code-editor for awesome web pages",
   "main": "build/codeflask.min.js",
   "files": [
@@ -36,7 +36,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kazzkiq/CodeFlask.js.git"
+    "url": "git+https://github.com/kazzkiq/CodeFlask.git"
   },
   "keywords": [
     "code-editor",
@@ -47,7 +47,7 @@
   "author": "Claudio Holanda",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kazzkiq/CodeFlask.js/issues"
+    "url": "https://github.com/kazzkiq/CodeFlask/issues"
   },
-  "homepage": "https://kazzkiq.github.io/CodeFlask.js/"
+  "homepage": "https://kazzkiq.github.io/CodeFlask/"
 }
