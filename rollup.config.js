@@ -8,7 +8,7 @@ const production = !process.env.ROLLUP_WATCH;
 export default {
 	input: 'src/codeflask.js',
 	output: {
-		sourcemap: true,
+		sourcemap: false,
 		format: 'umd',
 		name: 'CodeFlask',
 		file: 'build/codeflask.min.js'
