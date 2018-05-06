@@ -2,9 +2,8 @@
 [![Build Status](https://travis-ci.org/kazzkiq/CodeFlask.js.svg?branch=master)](https://travis-ci.org/kazzkiq/CodeFlask.js)
 
 <p align="center">
-  <img src="logo.png" width="190">
-  # CodeFlask
-  A micro code-editor for awesome web pages.
+  <img src="logo.png" width="190"><br>
+    CodeFlask: A micro code-editor for awesome web pages.
 </p>
 
 <p align="center">
@@ -22,7 +21,7 @@ npm install codeflask
 Or use it directly in browser via cdn service:
 
 ```
-https://unpkg.com/codeflask@1.0.0/build/codeflask.min.js
+https://unpkg.com/codeflask/build/codeflask.min.js
 ```
 
 ## Usage
@@ -53,7 +52,7 @@ flask.updateCode('const my_new_code_here = "Blabla"');
 ### Getting the current code from editor
 
 ```js
-flask.getCode();
+const code = flask.getCode();
 ```
 
 ### Enabling line numbers
@@ -86,7 +85,7 @@ flask.addLanguage('ruby', options)
 
 This API is simply a proxy to add a new language to [Prism](http://prismjs.com/) itself (the code highlighter). The `options` parameter must be the same accepted in Prism. You can read more about it [here](http://prismjs.com/extending.html#language-definitions).
 
-By default, CodeFlask comes with support for the following languages (which are default in Prism):
+By default, CodeFlask supports the following languages (which are also the default supported in Prism):
 
 - Markup (HTML/XML);
 - CSS;
@@ -95,9 +94,9 @@ By default, CodeFlask comes with support for the following languages (which are 
 
 ### Adding your own theme to CodeFlask
 
-By default, CodeFlask comes with a simple theme made from scratch called CodeNoon.
+By default, CodeFlask comes with a simple theme made from scratch called **[CodeNoon](https://github.com/kazzkiq/CodeFlask.js/blob/master/src/styles/theme-default.js)**.
 
-You can easily override this theme with your own by writting your own CSS in your own project and disabling CodeFlask default theme thru the `defaultTheme` option:
+You can easily override this theme with your own by writting your own CSS and adding it to your project. If that's the case, you should also disable **CodeNoon** with the `defaultTheme` option:
 
 ```js
 import CodeFlask from 'codeflask';
