@@ -108,19 +108,19 @@
       
       <script>
         const flask = new CodeFlask('.code-editor', { language: 'js' });
-flask.updateCode(`// Feel free to play with the code. :)
+flask.updateCode(`import CodeFlask from 'codeflask';
 
-function Hey(phrase)
-{
-  phrase = phrase || "Hey";
-  return console.log(phrase);
-}
+const flask = new CodeFlask('#my-selector', { language: 'js' });
 
-window.onLoad = function() {
-  Hey();
-  Hey("Jude");
-  Hey("Don't make it bad.");
-}`);
+// How to listen for changes on your editor
+flask.onUpdate((code) => {
+  //...
+});
+
+// How to update your editor with custom content:
+const new_content = 'let it = "go"';
+
+flask.updateCode(new_content);`);
 </script>
 
 <script>
