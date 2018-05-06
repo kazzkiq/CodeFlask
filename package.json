@@ -1,6 +1,6 @@
 {
   "name": "codeflask",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A micro code-editor for awesome web pages",
   "main": "build/codeflask.min.js",
   "files": [
@@ -14,7 +14,7 @@
     "start": "serve public",
     "pretest": "npm run build && node test/script-load.js",
     "test": "wdio test/wdio.conf.js",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm install && npm run build"
   },
   "dependencies": {
     "prismjs": "^1.14.0"
