@@ -204,7 +204,6 @@ export default class CodeFlask {
 
   setLineNumber() {
     this.lineNumber = this.code.split('\n').length;
-    console.log(this.lineNumber);
 
     if (this.opts.lineNumbers) {
       this.updateLineNumbersCount();
