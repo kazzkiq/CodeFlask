@@ -7,12 +7,20 @@ const production = !process.env.ROLLUP_WATCH;
 
 export default {
 	input: 'src/codeflask.js',
-	output: {
-		sourcemap: false,
-		format: 'umd',
-		name: 'CodeFlask',
-		file: 'build/codeflask.min.js'
-	},
+	output: [
+		{
+			sourcemap: false,
+			format: 'umd',
+			name: 'CodeFlask',
+			file: 'build/codeflask.min.js'
+		},
+		{
+			sourcemap: false,
+			format: 'es',
+			name: 'CodeFlask',
+			file: 'build/codeflask.module.js'
+		},
+	],
 	plugins: [
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
