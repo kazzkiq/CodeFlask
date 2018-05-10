@@ -99,7 +99,7 @@ export default class CodeFlask {
     this.opts.tabSize = this.opts.tabSize || 2;
     this.opts.enableAutocorrect = this.opts.enableAutocorrect || false;
     this.opts.lineNumbers = this.opts.lineNumbers || false;
-    this.opts.defaultTheme = this.opts.defaultTheme || true;
+    this.opts.defaultTheme = this.opts.defaultTheme !== false;
 
     if (this.opts.rtl === true) {
       this.elTextarea.setAttribute('dir', 'rtl');
