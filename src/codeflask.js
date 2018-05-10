@@ -39,7 +39,7 @@ export default class CodeFlask {
   }
 
   startEditor() {
-    const isCSSInjected = inject_css(editor_css);
+    const isCSSInjected = inject_css(editor_css, null, this.opts.styleParent);
     
     if (!isCSSInjected) {
       throw Error('Failed to inject CodeFlask CSS.');
@@ -99,7 +99,7 @@ export default class CodeFlask {
     this.opts.tabSize = this.opts.tabSize || 2;
     this.opts.enableAutocorrect = this.opts.enableAutocorrect || false;
     this.opts.lineNumbers = this.opts.lineNumbers || false;
-    this.opts.defaultTheme = this.opts.defaultTheme || true;
+    this.opts.defaultTheme = this.opts.defaultTheme !== false;
 
     if (this.opts.rtl === true) {
       this.elTextarea.setAttribute('dir', 'rtl');
@@ -119,7 +119,7 @@ export default class CodeFlask {
     }
 
     if (this.opts.defaultTheme) {
-      inject_css(default_css_theme, 'theme-default');
+      inject_css(default_css_theme, 'theme-default', this.opts.styleParent);
     }
   }
 
@@ -153,7 +153,9 @@ export default class CodeFlask {
 
     this.elTextarea.addEventListener('scroll', (e) => {
       this.elPre.style.transform = `translate3d(-${e.target.scrollLeft}px, -${e.target.scrollTop}px, 0)`;
-      this.elLineNumbers.style.transform = `translate3d(0, -${e.target.scrollTop}px, 0)`;
+      if (this.elLineNumbers) {
+        this.elLineNumbers.style.transform = `translate3d(0, -${e.target.scrollTop}px, 0)`;
+      }
     });
   }
 
@@ -202,7 +204,6 @@ export default class CodeFlask {
 
   setLineNumber() {
     this.lineNumber = this.code.split('\n').length;
-    console.log(this.lineNumber);
 
     if (this.opts.lineNumbers) {
       this.updateLineNumbersCount();
