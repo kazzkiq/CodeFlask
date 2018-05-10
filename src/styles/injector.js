@@ -1,6 +1,7 @@
-export function inject_css(css, styleName) {
+export function inject_css(css, styleName, parent) {
   const CSS_ID = styleName || 'codeflask-style';
-  
+  const PARENT = parent || document.head;
+
   if (!css) {
     return false;
   }
@@ -13,7 +14,7 @@ export function inject_css(css, styleName) {
 
   style.innerHTML = css;
   style.id = CSS_ID;
-  document.head.appendChild(style);
+  PARENT.appendChild(style);
 
   return true;
 }

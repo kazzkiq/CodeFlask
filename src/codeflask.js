@@ -39,7 +39,7 @@ export default class CodeFlask {
   }
 
   startEditor() {
-    const isCSSInjected = inject_css(editor_css);
+    const isCSSInjected = inject_css(editor_css, null, this.opts.styleParent);
     
     if (!isCSSInjected) {
       throw Error('Failed to inject CodeFlask CSS.');
@@ -119,7 +119,7 @@ export default class CodeFlask {
     }
 
     if (this.opts.defaultTheme) {
-      inject_css(default_css_theme, 'theme-default');
+      inject_css(default_css_theme, 'theme-default', this.opts.styleParent);
     }
   }
 
