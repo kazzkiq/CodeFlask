@@ -153,7 +153,9 @@ export default class CodeFlask {
 
     this.elTextarea.addEventListener('scroll', (e) => {
       this.elPre.style.transform = `translate3d(-${e.target.scrollLeft}px, -${e.target.scrollTop}px, 0)`;
-      this.elLineNumbers.style.transform = `translate3d(0, -${e.target.scrollTop}px, 0)`;
+      if (this.elLineNumbers) {
+        this.elLineNumbers.style.transform = `translate3d(0, -${e.target.scrollTop}px, 0)`;
+      }
     });
   }
 
