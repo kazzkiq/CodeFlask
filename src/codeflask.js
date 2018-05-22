@@ -40,7 +40,7 @@ export default class CodeFlask {
 
   startEditor() {
     const isCSSInjected = inject_css(editor_css, null, this.opts.styleParent);
-    
+
     if (!isCSSInjected) {
       throw Error('Failed to inject CodeFlask CSS.');
       return;
@@ -100,6 +100,8 @@ export default class CodeFlask {
     this.opts.enableAutocorrect = this.opts.enableAutocorrect || false;
     this.opts.lineNumbers = this.opts.lineNumbers || false;
     this.opts.defaultTheme = this.opts.defaultTheme !== false;
+    // Set word wrap
+    this.opts.wordWrap = this.opts.wordWrap || false;
 
     if (this.opts.rtl === true) {
       this.elTextarea.setAttribute('dir', 'rtl');
@@ -120,6 +122,12 @@ export default class CodeFlask {
 
     if (this.opts.defaultTheme) {
       inject_css(default_css_theme, 'theme-default', this.opts.styleParent);
+    }
+
+    // If wordwrap then enable it
+    if (this.opts.wordWrap) {
+      this.elTextarea.classList.add('word-wrap');
+      this.elPre.classList.add('word-wrap');
     }
   }
 
