@@ -61,6 +61,11 @@ export const editor_css = `
     text-align: left;
   }
 
+  .codeflask__flatten.word-wrap {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
   .codeflask--has-line-numbers .codeflask__flatten {
     width: calc(100% - ${LINE_NUMBER_WIDTH});
     left: ${LINE_NUMBER_WIDTH};

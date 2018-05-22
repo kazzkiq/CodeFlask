@@ -8,7 +8,7 @@ describe('CodeFlask Tests', () => {
   before(() => {
     browser.url('http://localhost:8888/');
   });
-  
+
   after(() => {
     server.close();
   });
@@ -37,7 +37,7 @@ describe('CodeFlask Tests', () => {
     expect(browser.isExisting('.codeflask .codeflask__lines')).to.be.true;
     expect(browser.isExisting('.codeflask .codeflask__lines__line')).to.be.true;
   });
-  
+
   it('should have same lineNumbers as lines of code', function () {
     $('.codeflask__textarea').setValue('let it = "go";\nconst parrot = "bird";');
     expect(browser.isExisting('.codeflask .codeflask__lines')).to.be.true;
@@ -105,5 +105,23 @@ describe('CodeFlask Tests', () => {
     $('.codeflask__textarea').setValue('return "my code here"');
     const code = browser.execute(() => { return flask.getCode(); });
     expect(code.value).to.be.equals('return "my code here"');
+  });
+
+  it('should not enable word wrap when its not set', async function () {
+    browser.execute(() => {
+      const test_div = document.createElement('div');
+      document.body.appendChild(test_div);
+      const flask_test = new CodeFlask(test_div, { language: 'js' });
+    });
+    expect(!browser.isExisting('.codeflask__flatten.word-wrap'));
+  });
+
+  it('should enable word wrap when its set', async function () {
+    browser.execute(() => {
+      const test_div = document.createElement('div');
+      document.body.appendChild(test_div);
+      const flask_test = new CodeFlask(test_div, { language: 'js', wordWrap: true });
+    });
+    expect(browser.isExisting('.codeflask__flatten.word-wrap'));
   });
 });
