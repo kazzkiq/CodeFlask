@@ -296,4 +296,12 @@ export default class CodeFlask {
       this.updateCallBack(this.code);
     }
   }
+  
+  enableEditor() {
+      this.elTextarea.setAttribute('disabled', false);
+  }  
+  
+  disableEdtor() {
+      this.elTextarea.setAttribute('disabled', true);
+  }
 }
