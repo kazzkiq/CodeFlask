@@ -255,7 +255,7 @@ export default class CodeFlask {
     this.elTextarea.value = newCode;
     this.elCode.innerHTML = escape_html(newCode);
     this.highlight();
-    setTimeout(this.runUpdate, 1);
+    setTimeout(this.runUpdate.bind(this), 1);
   }
 
   updateLanguage(newLanguage) {
