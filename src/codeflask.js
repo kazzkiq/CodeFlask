@@ -100,6 +100,8 @@ export default class CodeFlask {
     this.opts.enableAutocorrect = this.opts.enableAutocorrect || false;
     this.opts.lineNumbers = this.opts.lineNumbers || false;
     this.opts.defaultTheme = this.opts.defaultTheme !== false;
+    this.opts.areaId = this.opts.areaId || null;
+    this.opts.ariaLabelledby = this.opts.ariaLabelledby || null;
 
     if (this.opts.rtl === true) {
       this.elTextarea.setAttribute('dir', 'rtl');
@@ -120,6 +122,14 @@ export default class CodeFlask {
 
     if (this.opts.defaultTheme) {
       inject_css(default_css_theme, 'theme-default', this.opts.styleParent);
+    }
+
+    if (this.opts.areaId) {
+      this.elTextarea.setAttribute('id', this.opts.areaId);
+    }
+
+    if (this.opts.ariaLabelledby) {
+      this.elTextarea.setAttribute('aria-labelledby', this.opts.ariaLabelledby);
     }
   }
 

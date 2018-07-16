@@ -18,7 +18,7 @@
   </style>
 </head>
 <body>
-  <h1>Testing below:</h1>
+  <h1 id="header1">Testing below:</h1>
 
   <div class="test">// Feel free to play with the code. :)
 
@@ -35,7 +35,9 @@ window.onLoad = function() {
   <script>
     const flask = new CodeFlask('.test', {
       language: 'js',
-      lineNumbers: true
+      lineNumbers: true,
+      areaId: 'thing1',
+      ariaLabelledby: 'header1'
     });
   </script>
 </body>
