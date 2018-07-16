@@ -106,4 +106,22 @@ describe('CodeFlask Tests', () => {
     const code = browser.execute(() => { return flask.getCode(); });
     expect(code.value).to.be.equals('return "my code here"');
   });
+
+  it('should add an ID attribute with option', async function () {
+    browser.execute(() => {
+      const test_div = document.createElement('div');
+      document.body.appendChild(test_div);
+      const flask_test = new CodeFlask(test_div, { areaId: 'thing1' });
+    });
+    expect(browser.isExisting('.codeflask__textarea#thing1'));
+  });
+
+  it('should add an aria-labelledby attribute with option', async function () {
+    browser.execute(() => {
+      const test_div = document.createElement('div');
+      document.body.appendChild(test_div);
+      const flask_test = new CodeFlask(test_div, { ariaLabelledby: 'thing2' });
+    });
+    expect(browser.isExisting('.codeflask__textarea[aria-labelledby="thing2"]'));
+  });
 });
