@@ -1,6 +1,6 @@
 {
   "name": "codeflask",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "A micro code-editor for awesome web pages",
   "main": "build/codeflask.min.js",
   "module": "build/codeflask.module.js",
@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "dev": "serve build & rollup -c -w",
+    "dev": "serve bui ld & rollup -c -w",
     "start": "serve public",
     "pretest": "npm run build",
     "test": "wdio test/wdio.conf.js",
