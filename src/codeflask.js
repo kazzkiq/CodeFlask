@@ -102,6 +102,7 @@ export default class CodeFlask {
     this.opts.defaultTheme = this.opts.defaultTheme !== false;
     this.opts.areaId = this.opts.areaId || null;
     this.opts.ariaLabelledby = this.opts.ariaLabelledby || null;
+    this.opts.handleTabs = this.opts.handleTabs || true;
 
     if (this.opts.rtl === true) {
       this.elTextarea.setAttribute('dir', 'rtl');
@@ -170,19 +171,21 @@ export default class CodeFlask {
   }
 
   handleTabs(e) {
-    if (e.keyCode !== 9) {
-      return;
+    if (this.opts.handleTabs) {
+      if (e.keyCode !== 9) {
+        return;
+      }
+      e.preventDefault();
+
+      const tabCode = 9;
+      const pressedCode = e.keyCode;
+      const selectionStart = this.elTextarea.selectionStart;
+      const selectionEnd = this.elTextarea.selectionEnd;
+      const newCode = `${this.code.substring(0, selectionStart)}${' '.repeat(this.opts.tabSize)}${this.code.substring(selectionEnd)}`;
+
+      this.updateCode(newCode);
+      this.elTextarea.selectionEnd = selectionEnd + this.opts.tabSize;
     }
-    e.preventDefault();
-
-    const tabCode = 9;
-    const pressedCode = e.keyCode;
-    const selectionStart = this.elTextarea.selectionStart;
-    const selectionEnd = this.elTextarea.selectionEnd;
-    const newCode = `${this.code.substring(0, selectionStart)}${' '.repeat(this.opts.tabSize)}${this.code.substring(selectionEnd)}`;
-
-    this.updateCode(newCode);
-    this.elTextarea.selectionEnd = selectionEnd + this.opts.tabSize;
   }
 
   handleSelfClosingCharacters(e) {
