@@ -124,4 +124,28 @@ describe('CodeFlask Tests', () => {
     });
     expect(browser.isExisting('.codeflask__textarea[aria-labelledby="thing2"]'));
   });
+
+  xit('should handle the tab key in the editor', async function () {
+    let flask_test
+    browser.execute(() => {
+      const test_div = document.createElement('div');
+      document.body.appendChild(test_div);
+      flask_test = new CodeFlask(test_div, { handleTabs: true });
+    });
+    $('.codeflask__textarea').setValue('hi\thello after');
+    const code = browser.execute(() => { return flask.getCode(); });
+    expect(code.value).to.be.equals('hi\thello after');
+  });
+
+  xit('should not handle the tab key in the editor with handleTabs=false option', async function () {
+    let flask_test
+    browser.execute(() => {
+      const test_div = document.createElement('div');
+      document.body.appendChild(test_div);
+      flask_test = new CodeFlask(test_div, { handleTabs: false });
+    });
+    $('.codeflask__textarea').setValue('hi before tab\thello after');
+    const code = browser.execute(() => { return flask.getCode(); });
+    expect(code.value).to.be.equals('hi before tab');
+  });
 });
