@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "dev": "serve bui ld & rollup -c -w",
+    "dev": "serve build & rollup -c -w",
     "start": "serve public",
     "pretest": "npm run build",
     "test": "wdio test/wdio.conf.js",

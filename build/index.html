@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CodeFlask Test Page</title>
+  <script src="codeflask.min.js"></script>
+  <style>
+    body {
+      font-family: Arial;
+      margin: 30px;
+    }
+
+    .test {
+      background: #eee;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="header1">Testing below:</h1>
+
+  <div class="test">// Feel free to play with the code. :)
+
+function Hey(phrase) {
+    phrase = phrase || "Hey";
+    return console.log(phrase);
+}
+
+window.onLoad = function() {
+    Hey();
+    Hey("Jude");
+    Hey("Don't make it bad.");
+}</div>
+  <script>
+    const flask = new CodeFlask('.test', {
+      language: 'js',
+      lineNumbers: true,
+      areaId: 'thing1',
+      ariaLabelledby: 'header1',
+      handleTabs: true
+    });
+
+    window['flask'] = flask;
+  </script>
+</body>
+</html>

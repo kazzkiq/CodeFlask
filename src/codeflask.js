@@ -102,7 +102,11 @@ export default class CodeFlask {
     this.opts.defaultTheme = this.opts.defaultTheme !== false;
     this.opts.areaId = this.opts.areaId || null;
     this.opts.ariaLabelledby = this.opts.ariaLabelledby || null;
-    this.opts.handleTabs = this.opts.handleTabs || true;
+
+    // if handleTabs is not either true or false, make it true by default
+    if (typeof this.opts.handleTabs !== 'boolean') {
+      this.opts.handleTabs = true;
+    }
 
     if (this.opts.rtl === true) {
       this.elTextarea.setAttribute('dir', 'rtl');
