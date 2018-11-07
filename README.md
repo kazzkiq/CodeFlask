@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <img src="code.png" width="739"> 
+  <img src="code.png" width="739">
 </p>
 
 ## Installation
@@ -74,6 +74,17 @@ import CodeFlask from 'codeflask';
 const flask = new CodeFlask('#my-selector', {
   language: 'js',
   rtl: true
+});
+```
+
+### Enabling read only mode
+
+```js
+import CodeFlask from 'codeflask';
+
+const flask = new CodeFlask('#my-selector', {
+  language: 'js',
+  readonly: true
 });
 ```
 
