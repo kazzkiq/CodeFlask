@@ -8,7 +8,7 @@ describe('CodeFlask Tests', () => {
   before(() => {
     browser.url('http://localhost:8888/');
   });
-  
+
   after(() => {
     server.close();
   });
@@ -37,7 +37,7 @@ describe('CodeFlask Tests', () => {
     expect(browser.isExisting('.codeflask .codeflask__lines')).to.be.true;
     expect(browser.isExisting('.codeflask .codeflask__lines__line')).to.be.true;
   });
-  
+
   it('should have same lineNumbers as lines of code', function () {
     $('.codeflask__textarea').setValue('let it = "go";\nconst parrot = "bird";');
     expect(browser.isExisting('.codeflask .codeflask__lines')).to.be.true;
@@ -123,6 +123,36 @@ describe('CodeFlask Tests', () => {
       const flask_test = new CodeFlask(test_div, { ariaLabelledby: 'thing2' });
     });
     expect(browser.isExisting('.codeflask__textarea[aria-labelledby="thing2"]'));
+  });
+
+  it('should add a readonly attribute with option', async function () {
+    browser.execute(() => {
+      const test_div = document.createElement('div');
+      document.body.appendChild(test_div);
+      const flask_test = new CodeFlask(test_div, { readonly: true });
+    });
+
+    expect(browser.isExisting('.codeflask__textarea[readonly]'));
+  });
+
+  it('should not add a readonly attribute with option if it is set to false', async function () {
+    browser.execute(() => {
+      const test_div = document.createElement('div');
+      document.body.appendChild(test_div);
+      const flask_test = new CodeFlask(test_div, { readonly: false });
+    });
+
+    expect(browser.isExisting('.codeflask__textarea:not([readonly])'));
+  });
+
+  it('should not add a readonly attribute with option if it is not set', async function () {
+    browser.execute(() => {
+      const test_div = document.createElement('div');
+      document.body.appendChild(test_div);
+      const flask_test = new CodeFlask(test_div, { });
+    });
+
+    expect(browser.isExisting('.codeflask__textarea:not([readonly])'));
   });
 
   xit('should handle the tab key in the editor', async function () {
