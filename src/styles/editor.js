@@ -1,7 +1,8 @@
 import { BACKGROUND_COLOR, LINE_HEIGHT, FONT_SIZE } from './theme-default';
+import { cssSupports } from '../utils/css-supports';
 
 const FONT_FAMILY = `"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace`;
-const COLOR = (CSS.supports('caret-color', '#000')) ? BACKGROUND_COLOR : '#ccc';
+const COLOR = (cssSupports('caret-color', '#000')) ? BACKGROUND_COLOR : '#ccc';
 const LINE_NUMBER_WIDTH = '40px'
 
 
