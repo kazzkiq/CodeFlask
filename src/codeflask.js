@@ -139,7 +139,7 @@ export default class CodeFlask {
     }
 
     if (this.opts.readonly) {
-      this.elTextarea.setAttribute('readonly', this.opts.readonly);
+      this.enableReadonlyMode();
     }
   }
 
@@ -317,5 +317,13 @@ export default class CodeFlask {
     if (this.updateCallBack) {
       this.updateCallBack(this.code);
     }
+  }
+
+  enableReadonlyMode() {
+    this.elTextarea.setAttribute('readonly', true);
+  }
+
+  disableReadonlyMode() {
+    this.elTextarea.removeAttribute('readonly');
   }
 }

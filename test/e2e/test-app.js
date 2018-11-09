@@ -155,6 +155,28 @@ describe('CodeFlask Tests', () => {
     expect(browser.isExisting('.codeflask__textarea:not([readonly])'));
   });
 
+  it('should add a readonly attribute from a function call', async function () {
+    browser.execute(() => {
+      const test_div = document.createElement('div');
+      document.body.appendChild(test_div);
+      const flask_test = new CodeFlask(test_div, {});
+      flask_test.enableReadonlyMode();
+    });
+
+    expect(browser.isExisting('.codeflask__textarea[readonly]'));
+  });
+
+  it('should remove a readonly attribute from a function call', async function () {
+    browser.execute(() => {
+      const test_div = document.createElement('div');
+      document.body.appendChild(test_div);
+      const flask_test = new CodeFlask(test_div, { readonly: true });
+      flask_test.disableReadonlyMode();
+    });
+
+    expect(browser.isExisting('.codeflask__textarea:not([readonly])'));
+  });
+
   xit('should handle the tab key in the editor', async function () {
     let flask_test
     browser.execute(() => {
