@@ -1,7 +1,16 @@
-import { editor_css } from './styles/editor';
-import { inject_css } from './styles/injector';
-import { default_css_theme, FONT_SIZE } from './styles/theme-default';
-import { escape_html } from './utils/html-escape';
+import {
+  editor_css
+} from './styles/editor';
+import {
+  inject_css
+} from './styles/injector';
+import {
+  default_css_theme,
+  FONT_SIZE
+} from './styles/theme-default';
+import {
+  escape_html
+} from './utils/html-escape';
 import Prism from 'prismjs';
 
 export default class CodeFlask {
@@ -52,6 +61,7 @@ export default class CodeFlask {
     this.createTextarea();
     this.createPre();
     this.createCode();
+    this.createHighlighter();
 
     this.runOptions();
     this.listenTextarea();
@@ -87,11 +97,47 @@ export default class CodeFlask {
     this.setLineNumber();
   }
 
+  createHighlighter() {
+    this.elHighlight = this.createElement('span', this.elWrapper);
+    this.elHighlight.classList.add('codeflask_active_line');
+    this.elHighlight.style.width = window.getComputedStyle(this.elWrapper).width;
+  }
+
   createElement(elementTag, whereToAppend) {
     const element = document.createElement(elementTag);
     whereToAppend.appendChild(element);
 
     return element;
+  }
+
+  getCurrentLineNumber() {
+    const caretPos = this.elTextarea.selectionStart;
+    const text = this.elTextarea.value;
+    const allText = text.split('\n');
+    let sum = 0;
+    if (caretPos !== text.length) {
+      for (let i = 0; i < allText.length; ++i) {
+        // length is incremented to one becaus newline absence dunring split
+        sum += (allText[i].length + 1);
+        // if caret position is more than the previous line lenght
+        if (sum >= caretPos) {
+          //checks if last char is newline break
+          if (text[caretPos - 1] === '\n') return i + 2;
+          else return i + 1;
+        }
+      }
+    } else return allText.length;
+
+    return
+  }
+
+
+  activeLineHighlight(lineNumber) {
+    const activeLine = document.getElementById('codeflask_line_number_' + lineNumber);
+    const activeLineStyle = activeLine && activeLine.getBoundingClientRect().top;
+    const wrapperStyle = this.elWrapper.getBoundingClientRect().top;
+    const y = parseFloat(activeLineStyle) - parseFloat(wrapperStyle);
+    this.elHighlight.style.transform = `translateY(${y}px)`;
   }
 
   runOptions() {
@@ -144,13 +190,14 @@ export default class CodeFlask {
   }
 
   updateLineNumbersCount() {
-    let numberList = '';
-
+    while (this.elLineNumbers.firstChild) this.elLineNumbers.firstChild.remove();
     for (let i = 1; i <= this.lineNumber; i++) {
-      numberList = numberList + `<span class="codeflask__lines__line">${i}</span>`;
+      let lineNumber = document.createElement('div');
+      lineNumber.className = 'codeflask__lines__line';
+      lineNumber.id = 'codeflask_line_number_' + i;
+      lineNumber.textContent = i;
+      this.elLineNumbers.appendChild(lineNumber);
     }
-
-    this.elLineNumbers.innerHTML = numberList;
   }
 
   listenTextarea() {
@@ -161,20 +208,26 @@ export default class CodeFlask {
       setTimeout(() => {
         this.runUpdate();
         this.setLineNumber();
+        this.activeLineHighlight(this.getCurrentLineNumber());
       }, 1);
 
+      this.handleSelfClosingCharacters(e);
+      this.handleNewLineIndentation(e);
     });
 
     this.elTextarea.addEventListener('keydown', (e) => {
       this.handleTabs(e);
-      this.handleSelfClosingCharacters(e);
-      this.handleNewLineIndentation(e);
+    });
+
+    this.elTextarea.addEventListener('click', () => {
+      this.activeLineHighlight(this.getCurrentLineNumber());
     });
 
     this.elTextarea.addEventListener('scroll', (e) => {
       this.elPre.style.transform = `translate3d(-${e.target.scrollLeft}px, -${e.target.scrollTop}px, 0)`;
       if (this.elLineNumbers) {
         this.elLineNumbers.style.transform = `translate3d(0, -${e.target.scrollTop}px, 0)`;
+        this.elHighlight.style.transform = `translateY(-${e.target.scrollTop}px)`;
       }
     });
   }
@@ -199,28 +252,28 @@ export default class CodeFlask {
 
   handleSelfClosingCharacters(e) {
     const openChars = ['(', '[', '{', '<'];
-    const key = e.key;
+    const key = e.data;
 
     if (!openChars.includes(key)) {
       return;
     }
 
-    switch(key) {
+    switch (key) {
       case '(':
-      this.closeCharacter(')');
-      break;
+        this.closeCharacter(')');
+        break;
 
       case '[':
-      this.closeCharacter(']');
-      break;
+        this.closeCharacter(']');
+        break;
 
       case '{':
-      this.closeCharacter('}');
-      break;
+        this.closeCharacter('}');
+        break;
 
       case '<':
-      this.closeCharacter('>');
-      break;
+        this.closeCharacter('>');
+        break;
     }
   }
 
@@ -233,7 +286,7 @@ export default class CodeFlask {
   }
 
   handleNewLineIndentation(e) {
-    if (e.keyCode !== 13) {
+    if (e.type !== 'input' || e.type !== 'input' && e.inputType !== 'insertLineBreak') {
       return;
     };
 
@@ -246,8 +299,10 @@ export default class CodeFlask {
     // const currentLine = lines.length;
     // const lastLine = lines[currentLine - 1];
 
-    // console.log(currentLine, allLines);
+    // const selection = this.textSelection;
+    // const charIndex = selection.focusOffset;
 
+    // console.log(selection);
     // if (lastLine !== undefined && currentLine < allLines) {
     //   e.preventDefault();
     //   const spaces = lastLine.match(/^ {1,}/);
@@ -256,6 +311,7 @@ export default class CodeFlask {
     //     console.log(spaces[0].length);
     //     const newCode = `${this.code.substring(0, selectionStart)}\n${' '.repeat(spaces[0].length)}${this.code.substring(selectionEnd)}`;
     //     this.updateCode(newCode);
+    //     console.log(newCode);
     //     setTimeout(() => {
     //       this.elTextarea.selectionEnd = selectionEnd + spaces[0].length + 1;
     //     }, 0);
@@ -278,6 +334,7 @@ export default class CodeFlask {
     this.elCode.innerHTML = escape_html(newCode);
     this.highlight();
     setTimeout(this.runUpdate.bind(this), 1);
+    this.activeLineHighlight(1);
   }
 
   updateLanguage(newLanguage) {
