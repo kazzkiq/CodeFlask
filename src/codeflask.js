@@ -207,8 +207,6 @@ export default class CodeFlask {
       this.highlight();
       setTimeout(() => {
         this.runUpdate();
-        this.setLineNumber();
-        this.activeLineHighlight(this.getCurrentLineNumber());
       }, 1);
 
       this.handleSelfClosingCharacters(e);
@@ -217,6 +215,10 @@ export default class CodeFlask {
 
     this.elTextarea.addEventListener('keydown', (e) => {
       this.handleTabs(e);
+      setTimeout(() => {
+        this.setLineNumber();
+        this.activeLineHighlight(this.getCurrentLineNumber());
+      }, 0);
     });
 
     this.elTextarea.addEventListener('click', () => {
