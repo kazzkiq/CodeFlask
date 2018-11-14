@@ -44,6 +44,7 @@ export default class CodeFlask {
     }
 
     this.opts = opts;
+    this.activeLineId = null;
     this.startEditor();
   }
 
@@ -133,11 +134,13 @@ export default class CodeFlask {
 
 
   activeLineHighlight(lineNumber) {
-    const activeLine = document.getElementById('codeflask_line_number_' + lineNumber);
+    this.activeLineId = 'codeflask_line_number_' + lineNumber;
+    const activeLine = document.getElementById(this.activeLineId);
     const activeLineStyle = activeLine && activeLine.getBoundingClientRect().top;
     const wrapperStyle = this.elWrapper.getBoundingClientRect().top;
     const y = parseFloat(activeLineStyle) - parseFloat(wrapperStyle);
     this.elHighlight.style.transform = `translateY(${y}px)`;
+    // this.elHighlight.style.top = y + 'px';
   }
 
   runOptions() {
@@ -218,18 +221,23 @@ export default class CodeFlask {
       setTimeout(() => {
         this.setLineNumber();
         this.activeLineHighlight(this.getCurrentLineNumber());
-      }, 0);
+      }, 1);
     });
 
-    this.elTextarea.addEventListener('click', () => {
+    this.elTextarea.addEventListener('click', (e) => {
       this.activeLineHighlight(this.getCurrentLineNumber());
+    });
+    this.elTextarea.addEventListener('mousedown', (e) => {
+      if (e.which === 2) e.preventDefault();
     });
 
     this.elTextarea.addEventListener('scroll', (e) => {
       this.elPre.style.transform = `translate3d(-${e.target.scrollLeft}px, -${e.target.scrollTop}px, 0)`;
       if (this.elLineNumbers) {
         this.elLineNumbers.style.transform = `translate3d(0, -${e.target.scrollTop}px, 0)`;
-        this.elHighlight.style.transform = `translateY(-${e.target.scrollTop}px)`;
+        const activeLine = document.getElementById(this.activeLineId);
+        console.log(activeLine.getBoundingClientRect().top);
+        this.elHighlight.style.transform = `translateY(${activeLine.getBoundingClientRect().top}px)`;
       }
     });
   }

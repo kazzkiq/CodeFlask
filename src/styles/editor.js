@@ -120,7 +120,7 @@ export const editor_css = `
     top: 0;
     width: 100%;
     height: ${LINE_HEIGHT};
-    background-color: #99a2;
+    background-color: rgba(153, 153, 170, 0.2);
   }
 
   .codeflask.codeflask--has-line-numbers {
