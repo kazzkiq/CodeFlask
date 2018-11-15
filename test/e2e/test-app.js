@@ -64,6 +64,12 @@ describe('CodeFlask Tests', () => {
     expect(lines.length).to.equal(1);
   });
 
+  it('.updateCode(): should update lineNumbers for multiple lines', async function () {
+    browser.execute(() => { flask.updateCode("let age = 20\nlet lines = 2"); });
+    const lines = $$('.codeflask .codeflask__lines__line');
+    expect(lines.length).to.equal(2);
+  });
+
   it('.onUpdate(): should execute callback upon user interaction', async function () {
     $('.codeflask__textarea').setValue('');
     browser.execute(() => { flask.onUpdate(code => document.title = code) });
