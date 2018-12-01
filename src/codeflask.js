@@ -310,7 +310,7 @@ export default class CodeFlask {
         afterSelection  = inputVal.substring(selEndPos);
 
     var line_start = inputVal.lastIndexOf('\n',selStartPos-1);
-    var space_last = line_start+inputVal.slice(line_start+1).search(/[^ ]/);
+    var space_last = line_start+inputVal.slice(line_start+1).search(/[^ ]|$/);
     var indent     = (space_last>line_start)?(space_last-line_start):0;
     var newCode    = beforeSelection+'\n'+" ".repeat(indent)+afterSelection;
     
