@@ -185,13 +185,76 @@ export default class CodeFlask {
         return;
       }
       e.preventDefault();
+      
+      var input        = this.elTextarea,
+          selectionDir = input.selectionDirection,
+          selStartPos  = input.selectionStart,
+          selEndPos    = input.selectionEnd,
+          inputVal     = input.value;
 
-      const tabCode = 9;
-      const pressedCode = e.keyCode;
-      const selectionStart = this.elTextarea.selectionStart;
-      const selectionEnd = this.elTextarea.selectionEnd;
-      const newCode = `${this.code.substring(0, selectionStart)}${' '.repeat(this.opts.tabSize)}${this.code.substring(selectionEnd)}`;
+      var beforeSelection     = inputVal.substr(0, selStartPos),
+          selectionVal        = inputVal.substring(selStartPos, selEndPos),
+          afterSelection      = inputVal.substring(selEndPos);
 
+      if (selStartPos !== selEndPos && selectionVal.length >= this.indent.length) {
+          var currentLineStart = selStartPos - beforeSelection.split('\n').pop().length,
+          startIndentLen  = this.indent.length,
+          endIndentLen    = this.indent.length;
+
+          //Unindent
+          if (e.shiftKey) {
+              var currentLineStartStr = inputVal.substr(currentLineStart, this.indent.length);
+              //Line start whit indent
+              if (currentLineStartStr === this.indent) {
+
+                  startIndentLen = -startIndentLen;
+
+                  //Indent is in selection
+                  if (currentLineStart > selStartPos) {
+                      selectionVal = selectionVal.substring(0, currentLineStart) + selectionVal.substring(currentLineStart+this.indent.length);
+                      endIndentLen = 0;
+                  }
+                  //Indent is in start of selection
+                  else if (currentLineStart == selStartPos) {
+                      startIndentLen = 0;
+                      endIndentLen = 0;
+                      selectionVal = selectionVal.substring(this.indent.length);
+                  }
+                  //Indent is before selection
+                  else {
+                      endIndentLen = -endIndentLen;
+                      beforeSelection = beforeSelection.substring(0, currentLineStart) + beforeSelection.substring(currentLineStart+this.indent.length);
+                  }
+
+              }
+              else{
+                  startIndentLen = 0;
+                  endIndentLen = 0;
+              }
+
+              selectionVal = selectionVal.replace(new RegExp('\n'+this.indent.split('').join('\\'), 'g'), '\n');          
+          } 
+          //Indent
+          else {
+              beforeSelection = beforeSelection.substr(0, currentLineStart)+this.indent+beforeSelection.substring(currentLineStart, selStartPos);
+              selectionVal = selectionVal.replace(/\n/g, '\n'+this.indent);           
+          }
+
+          //Set new indented value
+          input.value = beforeSelection+selectionVal+afterSelection;
+
+          input.selectionStart        = selStartPos+startIndentLen;
+          input.selectionEnd          = selStartPos+selectionVal.length+endIndentLen;
+          input.selectionDirection    = selectionDir;
+
+      }
+      else{
+          input.value             = beforeSelection+this.indent+afterSelection;
+          input.selectionStart    = selStartPos+this.indent.length;
+          input.selectionEnd      = selStartPos+this.indent.length;
+      }
+
+      var newCode = input.value
       this.updateCode(newCode);
       this.elTextarea.selectionEnd = selectionEnd + this.opts.tabSize;
     }
