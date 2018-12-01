@@ -192,9 +192,9 @@ export default class CodeFlask {
           selEndPos    = input.selectionEnd,
           inputVal     = input.value;
 
-      var beforeSelection     = inputVal.substr(0, selStartPos),
-          selectionVal        = inputVal.substring(selStartPos, selEndPos),
-          afterSelection      = inputVal.substring(selEndPos);
+      var beforeSelection = inputVal.substr(0, selStartPos),
+          selectionVal    = inputVal.substring(selStartPos, selEndPos),
+          afterSelection  = inputVal.substring(selEndPos);
 
       if (selStartPos !== selEndPos && selectionVal.length >= this.indent.length) {
           var currentLineStart = selStartPos - beforeSelection.split('\n').pop().length,
@@ -217,19 +217,19 @@ export default class CodeFlask {
                   //Indent is in start of selection
                   else if (currentLineStart == selStartPos) {
                       startIndentLen = 0;
-                      endIndentLen = 0;
-                      selectionVal = selectionVal.substring(this.indent.length);
+                      endIndentLen   = 0;
+                      selectionVal   = selectionVal.substring(this.indent.length);
                   }
                   //Indent is before selection
                   else {
-                      endIndentLen = -endIndentLen;
+                      endIndentLen    = -endIndentLen;
                       beforeSelection = beforeSelection.substring(0, currentLineStart) + beforeSelection.substring(currentLineStart+this.indent.length);
                   }
 
               }
               else{
                   startIndentLen = 0;
-                  endIndentLen = 0;
+                  endIndentLen   = 0;
               }
 
               selectionVal = selectionVal.replace(new RegExp('\n'+this.indent.split('').join('\\'), 'g'), '\n');          
@@ -237,21 +237,21 @@ export default class CodeFlask {
           //Indent
           else {
               beforeSelection = beforeSelection.substr(0, currentLineStart)+this.indent+beforeSelection.substring(currentLineStart, selStartPos);
-              selectionVal = selectionVal.replace(/\n/g, '\n'+this.indent);           
+              selectionVal    = selectionVal.replace(/\n/g, '\n'+this.indent);           
           }
 
           //Set new indented value
           input.value = beforeSelection+selectionVal+afterSelection;
 
-          input.selectionStart        = selStartPos+startIndentLen;
-          input.selectionEnd          = selStartPos+selectionVal.length+endIndentLen;
-          input.selectionDirection    = selectionDir;
+          input.selectionStart     = selStartPos+startIndentLen;
+          input.selectionEnd       = selStartPos+selectionVal.length+endIndentLen;
+          input.selectionDirection = selectionDir;
 
       }
       else{
-          input.value             = beforeSelection+this.indent+afterSelection;
-          input.selectionStart    = selStartPos+this.indent.length;
-          input.selectionEnd      = selStartPos+this.indent.length;
+          input.value          = beforeSelection+this.indent+afterSelection;
+          input.selectionStart = selStartPos+this.indent.length;
+          input.selectionEnd   = selStartPos+this.indent.length;
       }
 
       var newCode = input.value
@@ -299,31 +299,26 @@ export default class CodeFlask {
     if (e.keyCode !== 13) {
       return;
     };
+    
+    e.preventDefault();
+    var input        = this.elTextarea,
+        selStartPos  = input.selectionStart,
+        selEndPos    = input.selectionEnd,
+        inputVal     = input.value;
 
-    // TODO: Make this shit work right
+    var beforeSelection = inputVal.substr(0, selStartPos),
+        afterSelection  = inputVal.substring(selEndPos);
 
-    // const selectionStart = this.elTextarea.selectionStart;
-    // const selectionEnd = this.elTextarea.selectionEnd;
-    // const allLines = this.code.split('\n').length;
-    // const lines = this.code.substring(0, selectionStart).split('\n');
-    // const currentLine = lines.length;
-    // const lastLine = lines[currentLine - 1];
+    var line_start = inputVal.lastIndexOf('\n',selStartPos-1);
+    var space_last = line_start+inputVal.slice(line_start+1).search(/[^ ]/);
+    var indent     = (space_last>line_start)?(space_last-line_start):0;
+    var newCode    = beforeSelection+'\n'+" ".repeat(indent)+afterSelection;
+    
+    input.value          = newCode
+    input.selectionStart = selStartPos+indent+1;
+    input.selectionEnd   = selStartPos+indent+1;
 
-    // console.log(currentLine, allLines);
-
-    // if (lastLine !== undefined && currentLine < allLines) {
-    //   e.preventDefault();
-    //   const spaces = lastLine.match(/^ {1,}/);
-
-    //   if (spaces) {
-    //     console.log(spaces[0].length);
-    //     const newCode = `${this.code.substring(0, selectionStart)}\n${' '.repeat(spaces[0].length)}${this.code.substring(selectionEnd)}`;
-    //     this.updateCode(newCode);
-    //     setTimeout(() => {
-    //       this.elTextarea.selectionEnd = selectionEnd + spaces[0].length + 1;
-    //     }, 0);
-    //   }
-    // }
+    this.updateCode(input.value);
   }
 
   closeCharacter(closeChar) {
