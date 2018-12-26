@@ -1,17 +1,17 @@
-export function cssSupports(property, value) {
+export function cssSupports (property, value) {
   if (CSS) {
-    return CSS.supports(property, value);
+    return CSS.supports(property, value)
   }
 
-  return toCamelCase(property) in document.body.style;
+  return toCamelCase(property) in document.body.style
 }
 
-export function toCamelCase(cssProperty) {
+export function toCamelCase (cssProperty) {
   cssProperty = cssProperty
     .split('-')
     .filter(word => !!word)
     .map(word => word[0].toUpperCase() + word.substr(1))
-    .join('');
+    .join('')
 
-  return cssProperty[0].toLowerCase() + cssProperty.substr(1);
+  return cssProperty[0].toLowerCase() + cssProperty.substr(1)
 }
