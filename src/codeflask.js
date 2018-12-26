@@ -105,6 +105,14 @@ export default class CodeFlask {
     if (typeof this.opts.handleTabs !== 'boolean') {
       this.opts.handleTabs = true
     }
+    // if handleTabs is not either true or false, make it true by default
+    if (typeof this.opts.handleSelfClosingCharacters !== 'boolean') {
+      this.opts.handleSelfClosingCharacters = true
+    }
+    // if handleTabs is not either true or false, make it true by default
+    if (typeof this.opts.handleNewLineIndentation !== 'boolean') {
+      this.opts.handleNewLineIndentation = true
+    }
 
     if (this.opts.rtl === true) {
       this.elTextarea.setAttribute('dir', 'rtl')
@@ -250,6 +258,7 @@ export default class CodeFlask {
   }
 
   handleSelfClosingCharacters (e) {
+    if (!this.opts.handleSelfClosingCharacters) return
     const openChars = ['(', '[', '{', '<', '\'', '"']
     const closeChars = [')', ']', '}', '>', '\'', '"']
     const key = e.key
@@ -298,6 +307,7 @@ export default class CodeFlask {
   }
 
   handleNewLineIndentation (e) {
+    if (!this.opts.handleNewLineIndentation) return
     if (e.keyCode !== 13) {
       return
     }
