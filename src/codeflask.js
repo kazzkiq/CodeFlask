@@ -251,35 +251,40 @@ export default class CodeFlask {
 
   handleSelfClosingCharacters (e) {
     const openChars = ['(', '[', '{', '<', '\'', '"']
+    const closeChars = [')', ']', '}', '>', '\'', '"']
     const key = e.key
 
-    if (!openChars.includes(key)) {
+    if (!openChars.includes(key) && !closeChars.includes(key)) {
       return
     }
 
     switch (key) {
       case '(':
-        this.closeCharacter(')')
+      case ')':
+        this.closeCharacter(key)
         break
 
       case '[':
-        this.closeCharacter(']')
+      case ']':
+        this.closeCharacter(key)
         break
 
       case '{':
-        this.closeCharacter('}')
+      case '}':
+        this.closeCharacter(key)
         break
 
       case '<':
-        this.closeCharacter('>')
+      case '>':
+        this.closeCharacter(key)
         break
 
       case '\'':
-        this.closeCharacter('\'')
+        this.closeCharacter(key)
         break
 
       case '"':
-        this.closeCharacter('"')
+        this.closeCharacter(key)
         break
     }
   }
@@ -318,14 +323,42 @@ export default class CodeFlask {
     this.updateCode(input.value)
   }
 
-  closeCharacter (closeChar) {
+  closeCharacter (char) {
     const selectionStart = this.elTextarea.selectionStart
     const selectionEnd = this.elTextarea.selectionEnd
-    const selectionText = this.code.substring(selectionStart, selectionEnd)
-    const newCode = `${this.code.substring(0, selectionStart)}${selectionText}${closeChar}${this.code.substring(selectionEnd)}`
 
-    this.updateCode(newCode)
+    if (!this.skipCloseChar(char)) {
+      let closeChar = char
+      switch (char) {
+        case '(':
+          closeChar = String.fromCharCode(char.charCodeAt() + 1)
+          break
+        case '<':
+        case '{':
+        case '[':
+          closeChar = String.fromCharCode(char.charCodeAt() + 2)
+          break
+      }
+      const selectionText = this.code.substring(selectionStart, selectionEnd)
+      const newCode = `${this.code.substring(0, selectionStart)}${selectionText}${closeChar}${this.code.substring(selectionEnd)}`
+      this.updateCode(newCode)
+    } else {
+      const skipChar = this.code.substr(selectionEnd, 1) === char
+      const newSelectionEnd = skipChar ? selectionEnd + 1 : selectionEnd
+      const closeChar = !skipChar && ['\'', '"'].includes(char) ? char : ''
+      const newCode = `${this.code.substring(0, selectionStart)}${closeChar}${this.code.substring(newSelectionEnd)}`
+      this.updateCode(newCode)
+      this.elTextarea.selectionEnd = ++this.elTextarea.selectionStart
+    }
+
     this.elTextarea.selectionEnd = selectionStart
+  }
+
+  skipCloseChar (char) {
+    const selectionStart = this.elTextarea.selectionStart
+    const selectionEnd = this.elTextarea.selectionEnd
+    const hasSelection = Math.abs(selectionEnd - selectionStart) > 0
+    return [')', '}', ']', '>'].includes(char) || (['\'', '"'].includes(char) && !hasSelection)
   }
 
   updateCode (newCode) {
