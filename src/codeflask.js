@@ -250,7 +250,7 @@ export default class CodeFlask {
   }
 
   handleSelfClosingCharacters (e) {
-    const openChars = ['(', '[', '{', '<']
+    const openChars = ['(', '[', '{', '<', '\'', '"']
     const key = e.key
 
     if (!openChars.includes(key)) {
@@ -272,6 +272,14 @@ export default class CodeFlask {
 
       case '<':
         this.closeCharacter('>')
+        break
+
+      case '\'':
+        this.closeCharacter('\'')
+        break
+
+      case '"':
+        this.closeCharacter('"')
         break
     }
   }
@@ -313,10 +321,11 @@ export default class CodeFlask {
   closeCharacter (closeChar) {
     const selectionStart = this.elTextarea.selectionStart
     const selectionEnd = this.elTextarea.selectionEnd
-    const newCode = `${this.code.substring(0, selectionStart)}${closeChar}${this.code.substring(selectionEnd)}`
+    const selectionText = this.code.substring(selectionStart, selectionEnd)
+    const newCode = `${this.code.substring(0, selectionStart)}${selectionText}${closeChar}${this.code.substring(selectionEnd)}`
 
     this.updateCode(newCode)
-    this.elTextarea.selectionEnd = selectionEnd
+    this.elTextarea.selectionEnd = selectionStart
   }
 
   updateCode (newCode) {
