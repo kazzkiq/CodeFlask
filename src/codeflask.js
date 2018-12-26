@@ -191,43 +191,44 @@ export default class CodeFlask {
       var beforeSelection = inputVal.substr(0, selStartPos)
       var selectionVal = inputVal.substring(selStartPos, selEndPos)
       var afterSelection = inputVal.substring(selEndPos)
+      const indent = ' '.repeat(this.opts.tabSize)
 
-      if (selStartPos !== selEndPos && selectionVal.length >= this.indent.length) {
+      if (selStartPos !== selEndPos && selectionVal.length >= indent.length) {
         var currentLineStart = selStartPos - beforeSelection.split('\n').pop().length
-        var startIndentLen = this.indent.length
-        var endIndentLen = this.indent.length
+        var startIndentLen = indent.length
+        var endIndentLen = indent.length
 
         // Unindent
         if (e.shiftKey) {
-          var currentLineStartStr = inputVal.substr(currentLineStart, this.indent.length)
+          var currentLineStartStr = inputVal.substr(currentLineStart, indent.length)
           // Line start whit indent
-          if (currentLineStartStr === this.indent) {
+          if (currentLineStartStr === indent) {
             startIndentLen = -startIndentLen
 
             if (currentLineStart > selStartPos) {
               // Indent is in selection
-              selectionVal = selectionVal.substring(0, currentLineStart) + selectionVal.substring(currentLineStart + this.indent.length)
+              selectionVal = selectionVal.substring(0, currentLineStart) + selectionVal.substring(currentLineStart + indent.length)
               endIndentLen = 0
             } else if (currentLineStart === selStartPos) {
               // Indent is in start of selection
               startIndentLen = 0
               endIndentLen = 0
-              selectionVal = selectionVal.substring(this.indent.length)
+              selectionVal = selectionVal.substring(indent.length)
             } else {
               // Indent is before selection
               endIndentLen = -endIndentLen
-              beforeSelection = beforeSelection.substring(0, currentLineStart) + beforeSelection.substring(currentLineStart + this.indent.length)
+              beforeSelection = beforeSelection.substring(0, currentLineStart) + beforeSelection.substring(currentLineStart + indent.length)
             }
           } else {
             startIndentLen = 0
             endIndentLen = 0
           }
 
-          selectionVal = selectionVal.replace(new RegExp('\n' + this.indent.split('').join('\\'), 'g'), '\n')
+          selectionVal = selectionVal.replace(new RegExp('\n' + indent.split('').join('\\'), 'g'), '\n')
         } else {
-        // Indent
-          beforeSelection = beforeSelection.substr(0, currentLineStart) + this.indent + beforeSelection.substring(currentLineStart, selStartPos)
-          selectionVal = selectionVal.replace(/\n/g, '\n' + this.indent)
+          // Indent
+          beforeSelection = beforeSelection.substr(0, currentLineStart) + indent + beforeSelection.substring(currentLineStart, selStartPos)
+          selectionVal = selectionVal.replace(/\n/g, '\n' + indent)
         }
 
         // Set new indented value
@@ -237,14 +238,14 @@ export default class CodeFlask {
         input.selectionEnd = selStartPos + selectionVal.length + endIndentLen
         input.selectionDirection = selectionDir
       } else {
-        input.value = beforeSelection + this.indent + afterSelection
-        input.selectionStart = selStartPos + this.indent.length
-        input.selectionEnd = selStartPos + this.indent.length
+        input.value = beforeSelection + indent + afterSelection
+        input.selectionStart = selStartPos + indent.length
+        input.selectionEnd = selStartPos + indent.length
       }
 
       var newCode = input.value
       this.updateCode(newCode)
-      this.elTextarea.selectionEnd = selectionEnd + this.opts.tabSize
+      this.elTextarea.selectionEnd = selEndPos + this.opts.tabSize
     }
   }
 
