@@ -5,7 +5,7 @@ const FONT_FAMILY = `"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Couri
 const COLOR = (cssSupports('caret-color', '#000')) ? BACKGROUND_COLOR : '#ccc'
 const LINE_NUMBER_WIDTH = '40px'
 
-export const editor_css = `
+export const editorCss = `
   .codeflask {
     position: absolute;
     width: 100%;

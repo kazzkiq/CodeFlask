@@ -1,4 +1,4 @@
-export function inject_css (css, styleName, parent) {
+export function injectCss (css, styleName, parent) {
   const CSS_ID = styleName || 'codeflask-style'
   const PARENT = parent || document.head
 

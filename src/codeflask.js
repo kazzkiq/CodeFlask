@@ -1,7 +1,7 @@
-import { editor_css } from './styles/editor'
-import { inject_css } from './styles/injector'
-import { default_css_theme } from './styles/theme-default'
-import { escape_html } from './utils/html-escape'
+import { editorCss } from './styles/editor'
+import { injectCss } from './styles/injector'
+import { defaultCssTheme } from './styles/theme-default'
+import { escapeHtml } from './utils/html-escape'
 import Prism from 'prismjs'
 
 export default class CodeFlask {
@@ -37,7 +37,7 @@ export default class CodeFlask {
   }
 
   startEditor () {
-    const isCSSInjected = inject_css(editor_css, null, this.opts.styleParent)
+    const isCSSInjected = injectCss(editorCss, null, this.opts.styleParent)
 
     if (!isCSSInjected) {
       throw Error('Failed to inject CodeFlask CSS.')
@@ -124,7 +124,7 @@ export default class CodeFlask {
     }
 
     if (this.opts.defaultTheme) {
-      inject_css(default_css_theme, 'theme-default', this.opts.styleParent)
+      injectCss(defaultCssTheme, 'theme-default', this.opts.styleParent)
     }
 
     if (this.opts.areaId) {
@@ -153,7 +153,7 @@ export default class CodeFlask {
   listenTextarea () {
     this.elTextarea.addEventListener('input', (e) => {
       this.code = e.target.value
-      this.elCode.innerHTML = escape_html(e.target.value)
+      this.elCode.innerHTML = escapeHtml(e.target.value)
       this.highlight()
       setTimeout(() => {
         this.runUpdate()
@@ -182,22 +182,22 @@ export default class CodeFlask {
       }
       e.preventDefault()
 
-      var input = this.elTextarea,
-        selectionDir = input.selectionDirection,
-        selStartPos = input.selectionStart,
-        selEndPos = input.selectionEnd,
-        inputVal = input.value
+      var input = this.elTextarea
+      var selectionDir = input.selectionDirection
+      var selStartPos = input.selectionStart
+      var selEndPos = input.selectionEnd
+      var inputVal = input.value
 
-      var beforeSelection = inputVal.substr(0, selStartPos),
-        selectionVal = inputVal.substring(selStartPos, selEndPos),
-        afterSelection = inputVal.substring(selEndPos)
+      var beforeSelection = inputVal.substr(0, selStartPos)
+      var selectionVal = inputVal.substring(selStartPos, selEndPos)
+      var afterSelection = inputVal.substring(selEndPos)
 
       if (selStartPos !== selEndPos && selectionVal.length >= this.indent.length) {
-        var currentLineStart = selStartPos - beforeSelection.split('\n').pop().length,
-          startIndentLen = this.indent.length,
-          endIndentLen = this.indent.length
+        var currentLineStart = selStartPos - beforeSelection.split('\n').pop().length
+        var startIndentLen = this.indent.length
+        var endIndentLen = this.indent.length
 
-          // Unindent
+        // Unindent
         if (e.shiftKey) {
           var currentLineStartStr = inputVal.substr(currentLineStart, this.indent.length)
           // Line start whit indent
@@ -208,7 +208,7 @@ export default class CodeFlask {
               // Indent is in selection
               selectionVal = selectionVal.substring(0, currentLineStart) + selectionVal.substring(currentLineStart + this.indent.length)
               endIndentLen = 0
-            } else if (currentLineStart == selStartPos) {
+            } else if (currentLineStart === selStartPos) {
               // Indent is in start of selection
               startIndentLen = 0
               endIndentLen = 0
@@ -286,20 +286,20 @@ export default class CodeFlask {
   handleNewLineIndentation (e) {
     if (e.keyCode !== 13) {
       return
-    };
+    }
 
     e.preventDefault()
-    var input = this.elTextarea,
-      selStartPos = input.selectionStart,
-      selEndPos = input.selectionEnd,
-      inputVal = input.value
+    var input = this.elTextarea
+    var selStartPos = input.selectionStart
+    var selEndPos = input.selectionEnd
+    var inputVal = input.value
 
-    var beforeSelection = inputVal.substr(0, selStartPos),
-      afterSelection = inputVal.substring(selEndPos)
+    var beforeSelection = inputVal.substr(0, selStartPos)
+    var afterSelection = inputVal.substring(selEndPos)
 
-    var line_start = inputVal.lastIndexOf('\n', selStartPos - 1)
-    var space_last = line_start + inputVal.slice(line_start + 1).search(/[^ ]|$/)
-    var indent = (space_last > line_start) ? (space_last - line_start) : 0
+    var lineStart = inputVal.lastIndexOf('\n', selStartPos - 1)
+    var spaceLast = lineStart + inputVal.slice(lineStart + 1).search(/[^ ]|$/)
+    var indent = (spaceLast > lineStart) ? (spaceLast - lineStart) : 0
     var newCode = beforeSelection + '\n' + ' '.repeat(indent) + afterSelection
 
     input.value = newCode
@@ -321,7 +321,7 @@ export default class CodeFlask {
   updateCode (newCode) {
     this.code = newCode
     this.elTextarea.value = newCode
-    this.elCode.innerHTML = escape_html(newCode)
+    this.elCode.innerHTML = escapeHtml(newCode)
     this.highlight()
     this.setLineNumber()
     setTimeout(this.runUpdate.bind(this), 1)
