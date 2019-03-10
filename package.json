@@ -19,6 +19,7 @@
     "prepublishOnly": "npm install && npm run build"
   },
   "dependencies": {
+    "@types/prismjs": "^1.9.1",
     "prismjs": "^1.14.0"
   },
   "devDependencies": {
