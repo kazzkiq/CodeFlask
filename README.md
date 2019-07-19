@@ -96,7 +96,7 @@ flask.addLanguage('ruby', options)
 
 #### For Example to add 'Ruby'
 
-```
+```js
 import Prism from 'prismjs';
 import CodeFlask from 'codeflask';
 
