@@ -31,7 +31,20 @@ import CodeFlask from 'codeflask';
 
 const flask = new CodeFlask('#my-selector', { language: 'js' });
 ```
+you can also pass a DOM element instead of a selector:
+```js
+import CodeFlask from 'codeflask';
 
+const editorElem = document.getElementById('editor');
+const flask = new CodeFlask(editorElem, { language: 'js' });
+```
+Usage with Shadow DOM:
+```js
+import CodeFlask from 'codeflask';
+...
+const shadowElem = this.shadowRoot.querySelector('#editor');
+const flask = new CodeFlask(shadowElem, { language: 'js', styleParent: this.shadowRoot });
+```
 ### Listening for changes in editor
 
 ```js
