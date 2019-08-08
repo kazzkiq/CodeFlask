@@ -31,7 +31,7 @@ import CodeFlask from 'codeflask';
 
 const flask = new CodeFlask('#my-selector', { language: 'js' });
 ```
-you can also pass a DOM element instead of a selector:
+You can also pass a DOM element instead of a selector:
 ```js
 import CodeFlask from 'codeflask';
 
