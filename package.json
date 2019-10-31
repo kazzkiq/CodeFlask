@@ -4,7 +4,7 @@
   "description": "A micro code-editor for awesome web pages",
   "main": "build/codeflask.min.js",
   "module": "build/codeflask.module.js",
-  "types": "index.d.ts"
+  "types": "index.d.ts",
   "files": [
     "build/codeflask.min.js",
     "build/codeflask.module.js",
