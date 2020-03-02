@@ -100,7 +100,7 @@ export default class CodeFlask {
     this.opts.areaId = this.opts.areaId || null
     this.opts.ariaLabelledby = this.opts.ariaLabelledby || null
     this.opts.readonly = this.opts.readonly || null
-    this.opts.noInitialCallback = this.opts.noInitilaCallback || false;
+    this.opts.noInitialCallback = this.opts.noInitialCallback || false;
 
     // if handleTabs is not either true or false, make it true by default
     if (typeof this.opts.handleTabs !== 'boolean') {
