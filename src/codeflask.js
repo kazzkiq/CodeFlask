@@ -52,7 +52,7 @@ export default class CodeFlask {
 
     this.runOptions()
     this.listenTextarea()
-    this.populateDefault()
+    this.populateDefault(this.opts.noInitialCallback)
     this.updateCode(this.code,this.opts.noInitialCallback)
   }
 
@@ -393,8 +393,8 @@ export default class CodeFlask {
     Prism.languages[name] = options
   }
 
-  populateDefault () {
-    this.updateCode(this.code)
+  populateDefault (preventCallback) {
+    this.updateCode(this.code,preventCallback)
   }
 
   highlight () {
