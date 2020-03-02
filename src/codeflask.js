@@ -371,13 +371,13 @@ export default class CodeFlask {
     return [')', '}', ']', '>'].includes(char) || (['\'', '"'].includes(char) && !hasSelection)
   }
 
-  updateCode (newCode) {
+  updateCode (newCode,preventCallback) {
     this.code = newCode
     this.elTextarea.value = newCode
     this.elCode.innerHTML = escapeHtml(newCode)
     this.highlight()
     this.setLineNumber()
-    setTimeout(this.runUpdate.bind(this), 1)
+    if (! preventCallback) setTimeout(this.runUpdate.bind(this), 1)
   }
 
   updateLanguage (newLanguage) {
