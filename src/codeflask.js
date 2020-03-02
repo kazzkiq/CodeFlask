@@ -53,7 +53,7 @@ export default class CodeFlask {
     this.runOptions()
     this.listenTextarea()
     this.populateDefault()
-    this.updateCode(this.code)
+    this.updateCode(this.code,this.opts.noInitialCallback)
   }
 
   createWrapper () {
@@ -100,6 +100,7 @@ export default class CodeFlask {
     this.opts.areaId = this.opts.areaId || null
     this.opts.ariaLabelledby = this.opts.ariaLabelledby || null
     this.opts.readonly = this.opts.readonly || null
+    this.opts.noInitialCallback = this.opts.noInitilaCallback || false;
 
     // if handleTabs is not either true or false, make it true by default
     if (typeof this.opts.handleTabs !== 'boolean') {
