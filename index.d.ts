@@ -1,10 +1,6 @@
-import * as prism from 'prismjs';
 
 export as namespace codeflask
 
-export type LanguageDefinition = {
-  [token: string]: prism.LanguageDefinition | RegExp
-}
 
 export interface CodeFlaskOptions {
   language?: string
@@ -16,6 +12,7 @@ export interface CodeFlaskOptions {
   areaId?: string
   ariaLabelledby?: string
   readonly?: boolean
+  highLighter?: function
 }
 
 export default class CodeFlask {
@@ -23,7 +20,6 @@ export default class CodeFlask {
 
   updateCode(newCode: string): void 
   updateLanguage(newLanguage: string): void
-  addLanguage(name: string, options: LanguageDefinition): void
 
   getCode(): string
   onUpdate(callback: (code: string) => void): void

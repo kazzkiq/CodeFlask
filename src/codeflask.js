@@ -2,7 +2,6 @@ import { editorCss } from './styles/editor'
 import { injectCss } from './styles/injector'
 import { defaultCssTheme } from './styles/theme-default'
 import { escapeHtml } from './utils/html-escape'
-import Prism from 'prismjs'
 
 export default class CodeFlask {
   constructor (selectorOrElement, opts) {
@@ -147,6 +146,7 @@ export default class CodeFlask {
     if (this.opts.readonly) {
       this.enableReadonlyMode()
     }
+    this.opts.highLighter=this.opts.highLighter||function(){}
   }
 
   updateLineNumbersCount () {
@@ -389,16 +389,13 @@ export default class CodeFlask {
     this.highlight()
   }
 
-  addLanguage (name, options) {
-    Prism.languages[name] = options
-  }
 
   populateDefault (preventCallback) {
     this.updateCode(this.code,preventCallback)
   }
 
   highlight () {
-    Prism.highlightElement(this.elCode, false)
+    this.opts.highLighter.highlightElement(this.elCode, false)
   }
 
   onUpdate (callback) {
