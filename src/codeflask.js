@@ -395,7 +395,7 @@ export default class CodeFlask {
   }
 
   highlight () {
-    this.opts.highLighter.highlightElement(this.elCode, false)
+    this.opts.highLighter(this.elCode, false)
   }
 
   onUpdate (callback) {
