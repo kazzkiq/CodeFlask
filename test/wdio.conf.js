@@ -1,7 +1,7 @@
 'use strict'
 
 exports.config = {
-  port: '9515',
+  port: 9515,
   path: '/',
   specs: [
     './test/e2e/*.js'
@@ -23,7 +23,7 @@ exports.config = {
   capabilities: [
     {
       browserName: 'chrome',
-      chromeOptions: {
+      "goog:chromeOptions": {
         args: ['--headless', '--disable-gpu', '--window-size=1280,800']
       }
     }
