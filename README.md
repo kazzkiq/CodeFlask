@@ -107,6 +107,20 @@ const flask = new CodeFlask('#my-selector', {
 flask.addLanguage('ruby', options)
 ```
 
+#### For Example to add 'Ruby'
+
+```js
+import Prism from 'prismjs';
+import CodeFlask from 'codeflask';
+
+const flask = new CodeFlask('#my-selector', {
+  language: 'ruby',
+  readonly: true
+});
+
+flask.addLanguage('ruby', Prism.languages['ruby']);
+```
+
 This API is simply a proxy to add a new language to [Prism](http://prismjs.com/) itself (the code highlighter). The `options` parameter must be the same accepted in Prism. You can read more about it [here](http://prismjs.com/extending.html#language-definitions).
 
 By default, CodeFlask supports the following languages (which are also the default supported in Prism):
