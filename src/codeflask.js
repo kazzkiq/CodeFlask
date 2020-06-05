@@ -170,6 +170,9 @@ export default class CodeFlask {
     })
 
     this.elTextarea.addEventListener('keydown', (e) => {
+      if (this.opts.readonly) {
+        return;
+      }
       this.handleTabs(e)
       this.handleSelfClosingCharacters(e)
       this.handleNewLineIndentation(e)
