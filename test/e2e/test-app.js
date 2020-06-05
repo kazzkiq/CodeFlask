@@ -186,6 +186,21 @@ describe('CodeFlask Tests', () => {
     expect($('.codeflask__textarea:not([readonly])').isExisting()).to.be.true;
   });
 
+  it('should not add line by press enter when editor is readonly', function () {
+    browser.execute(() => {
+      // remove all existing editors
+      document.body.innerHTML = '';
+      const rootEl = document.createElement('div');
+      document.body.appendChild(rootEl);
+
+      new CodeFlask(rootEl, { readonly: true, lineNumbers: true });
+      rootEl.querySelector('.codeflask .codeflask__textarea').dispatchEvent(new KeyboardEvent('keydown',{ key: 'Enter', keyCode: 13 }));
+    });
+
+    const lines = $$('.codeflask .codeflask__lines__line');
+    expect(lines.length).to.equal(1);
+  });
+
   xit('should handle the tab key in the editor', function () {
     let flask_test
     browser.execute(() => {
