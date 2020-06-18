@@ -100,6 +100,7 @@ export default class CodeFlask {
     this.opts.areaId = this.opts.areaId || null
     this.opts.ariaLabelledby = this.opts.ariaLabelledby || null
     this.opts.readonly = this.opts.readonly || null
+    this.opts.customEventListeners = this.opts.customEventListeners || {}
 
     // if handleTabs is not either true or false, make it true by default
     if (typeof this.opts.handleTabs !== 'boolean') {
@@ -159,6 +160,13 @@ export default class CodeFlask {
   }
 
   listenTextarea () {
+    const customEventListeners = this.opts.customEventListeners
+    for (const eventName in customEventListeners) { 
+      if (customEventListeners.hasOwnProperty(eventName)) {
+        this.elTextarea.addEventListener(eventName, customEventListeners[eventName])
+      }
+    }
+
     this.elTextarea.addEventListener('input', (e) => {
       this.code = e.target.value
       this.elCode.innerHTML = escapeHtml(e.target.value)
