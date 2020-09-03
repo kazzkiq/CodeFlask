@@ -39,7 +39,7 @@
     "rollup-plugin-commonjs": "^9.1.0",
     "rollup-plugin-node-resolve": "^3.0.3",
     "rollup-plugin-uglify": "^3.0.0",
-    "serve": "^7.0.0",
+    "serve": "^11.3.2",
     "wdio-chromedriver-service": "^6.0.3"
   },
   "repository": {
