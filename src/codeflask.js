@@ -2,7 +2,6 @@ import { editorCss } from './styles/editor'
 import { injectCss } from './styles/injector'
 import { defaultCssTheme } from './styles/theme-default'
 import { escapeHtml } from './utils/html-escape'
-import Prism from 'prismjs'
 
 export default class CodeFlask {
   constructor (selectorOrElement, opts) {
@@ -52,8 +51,8 @@ export default class CodeFlask {
 
     this.runOptions()
     this.listenTextarea()
-    this.populateDefault()
-    this.updateCode(this.code)
+    this.populateDefault(this.opts.noInitialCallback)
+    this.updateCode(this.code,this.opts.noInitialCallback)
   }
 
   createWrapper () {
@@ -100,6 +99,7 @@ export default class CodeFlask {
     this.opts.areaId = this.opts.areaId || null
     this.opts.ariaLabelledby = this.opts.ariaLabelledby || null
     this.opts.readonly = this.opts.readonly || null
+    this.opts.noInitialCallback = this.opts.noInitialCallback || false;
 
     // if handleTabs is not either true or false, make it true by default
     if (typeof this.opts.handleTabs !== 'boolean') {
@@ -146,6 +146,7 @@ export default class CodeFlask {
     if (this.opts.readonly) {
       this.enableReadonlyMode()
     }
+    this.opts.highLighter=this.opts.highLighter||function(){}
   }
 
   updateLineNumbersCount () {
@@ -374,13 +375,13 @@ export default class CodeFlask {
     return [')', '}', ']', '>'].includes(char) || (['\'', '"'].includes(char) && !hasSelection)
   }
 
-  updateCode (newCode) {
+  updateCode (newCode,preventCallback) {
     this.code = newCode
     this.elTextarea.value = newCode
     this.elCode.innerHTML = escapeHtml(newCode)
     this.highlight()
     this.setLineNumber()
-    setTimeout(this.runUpdate.bind(this), 1)
+    if (! preventCallback) setTimeout(this.runUpdate.bind(this), 1)
   }
 
   updateLanguage (newLanguage) {
@@ -391,16 +392,13 @@ export default class CodeFlask {
     this.highlight()
   }
 
-  addLanguage (name, options) {
-    Prism.languages[name] = options
-  }
 
-  populateDefault () {
-    this.updateCode(this.code)
+  populateDefault (preventCallback) {
+    this.updateCode(this.code,preventCallback)
   }
 
   highlight () {
-    Prism.highlightElement(this.elCode, false)
+    this.opts.highLighter(this.elCode, false)
   }
 
   onUpdate (callback) {
