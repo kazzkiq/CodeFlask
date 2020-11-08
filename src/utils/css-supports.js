@@ -3,7 +3,7 @@ export function cssSupports (property, value) {
     return CSS.supports(property, value)
   }
 
-  if (typeof document === 'undefined') {
+  if (typeof document === 'undefined' || typeof document.body === 'undefined' || typeof document.body.style !== 'object' ) {
     return false;
   }
 
