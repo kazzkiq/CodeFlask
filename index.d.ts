@@ -6,6 +6,10 @@ export type LanguageDefinition = {
   [token: string]: prism.LanguageDefinition | RegExp
 }
 
+export type EventListeners = {
+  [index: string]: (UIEvent) => void
+}
+
 export interface CodeFlaskOptions {
   language?: string
   rtl?: boolean
@@ -16,6 +20,7 @@ export interface CodeFlaskOptions {
   areaId?: string
   ariaLabelledby?: string
   readonly?: boolean
+  customEventListeners?: EventListeners
 }
 
 export default class CodeFlask {
