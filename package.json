@@ -1,6 +1,6 @@
 {
   "name": "@acarl005/codeflask",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A micro code-editor for awesome web pages",
   "main": "build/codeflask.min.js",
   "module": "build/codeflask.module.js",
@@ -21,10 +21,10 @@
     "prepublishOnly": "npm install && npm run build"
   },
   "dependencies": {
-    "@types/prismjs": "*"
+    "@types/prismjs": "^1.9.1"
   },
   "peerDependencies": {
-    "prismjs": "^1.14.0"
+    "prismjs": "*"
   },
   "devDependencies": {
     "@wdio/cli": "^6.1.15",
