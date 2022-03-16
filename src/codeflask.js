@@ -2,20 +2,19 @@ import { editorCss } from './styles/editor'
 import { injectCss } from './styles/injector'
 import { defaultCssTheme } from './styles/theme-default'
 import { escapeHtml } from './utils/html-escape'
-import Prism from 'prismjs'
 
 export default class CodeFlask {
-  constructor (selectorOrElement, opts) {
+  constructor (selectorOrElement, Prism, opts) {
     if (!selectorOrElement) {
-      // If no selector or element is passed to CodeFlask,
-      // stop execution and throw error.
-      throw Error('CodeFlask expects a parameter which is Element or a String selector')
+      throw Error('CodeFlask expects 1st parameter to be an Element or a String selector')
+    }
+
+    if (!Prism) {
+      throw Error('CodeFlask expects 2nd parameter to be the Prism peer dependency')
     }
 
     if (!opts) {
-      // If no selector or element is passed to CodeFlask,
-      // stop execution and throw error.
-      throw Error('CodeFlask expects an object containing options as second parameter')
+      throw Error('CodeFlask expects 3rd parameter to be an object containing options')
     }
 
     if (selectorOrElement.nodeType) {
@@ -32,6 +31,7 @@ export default class CodeFlask {
       }
     }
 
+    this.Prism = Prism
     this.opts = opts
     this.startEditor()
   }
@@ -161,7 +161,7 @@ export default class CodeFlask {
 
   listenTextarea () {
     const customEventListeners = this.opts.customEventListeners
-    for (const eventName in customEventListeners) { 
+    for (const eventName in customEventListeners) {
       if (customEventListeners.hasOwnProperty(eventName)) {
         this.elTextarea.addEventListener(eventName, customEventListeners[eventName])
       }
@@ -400,7 +400,7 @@ export default class CodeFlask {
   }
 
   addLanguage (name, options) {
-    Prism.languages[name] = options
+    this.Prism.languages[name] = options
   }
 
   populateDefault () {
@@ -408,7 +408,7 @@ export default class CodeFlask {
   }
 
   highlight () {
-    Prism.highlightElement(this.elCode, false)
+    this.Prism.highlightElement(this.elCode, false)
   }
 
   onUpdate (callback) {
