@@ -411,6 +411,18 @@ export default class CodeFlask {
     this.Prism.highlightElement(this.elCode, false)
   }
 
+  highlightLines(lineSpec) {
+    /* This requires the "line-highlight" plugin in PrismJS
+    Examples
+      5: The 5th line
+      1-5: Lines 1 through 5
+      1,4: Line 1 and line 4
+      1-2, 5, 9-20: Lines 1 through 2, line 5, lines 9 through 20
+      Pass empty string to remove highlighting from all lines
+    */
+    this.elPre.setAttribute('data-line', lineSpec)
+  }
+
   onUpdate (callback) {
     if (callback && {}.toString.call(callback) !== '[object Function]') {
       throw Error('CodeFlask expects callback of type Function')
