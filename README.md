@@ -8,6 +8,7 @@ I modified [CodeFlask](https://github.com/kazzkiq/CodeFlask) to be able to...
 
 1. Make PrismJS a peer dependency
 1. Attach custom event listeners to the editor
+1. Support the [Line Highlight](https://prismjs.com/plugins/line-highlight/) plugin in PrismJS
 
 ```javascript
 import CodeFlask from "codeflask"
@@ -25,6 +26,8 @@ const flask = new CodeFlask(editor, Prism, {
     }
   }
 })
+
+flask.highlightLines("4-7")
 ```
 
 PrismJS is highly customizable.
