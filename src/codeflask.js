@@ -421,7 +421,7 @@ export default class CodeFlask {
       Pass empty string to remove highlighting from all lines
     */
     this.elPre.setAttribute('data-line', lineSpec)
-    setTimeout(this.runUpdate.bind(this), 1)
+    this.highlight()
   }
 
   onUpdate (callback) {
