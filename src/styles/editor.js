@@ -85,7 +85,7 @@ export const editorCss = `
     left: 0;
     top: 0;
     width: ${LINE_NUMBER_WIDTH};
-    height: 100%;
+    min-height: 100%;
     text-align: right;
     color: #999;
     border-right: 1px solid #f8f8f8;
