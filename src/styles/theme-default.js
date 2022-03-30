@@ -1,6 +1,6 @@
 export const BACKGROUND_COLOR = '#fff'
 export const LINE_HEIGHT = '20px'
-export const FONT_SIZE = '13px'
+export const FONT_SIZE = '16px'
 
 export const defaultCssTheme = `
 .codeflask {
