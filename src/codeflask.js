@@ -33,6 +33,7 @@ export default class CodeFlask {
     }
 
     this.opts = opts
+    this.events = {};
     this.startEditor()
   }
 
@@ -81,7 +82,13 @@ export default class CodeFlask {
   createLineNumbers () {
     this.elLineNumbers = this.createElement('div', this.elWrapper)
     this.elLineNumbers.classList.add('codeflask__lines')
+    this.elWrapper.classList.add('codeflask--has-line-numbers')
     this.setLineNumber()
+  }
+
+  destroyLineNumbers () {
+    this.elWrapper.classList.remove('codeflask--has-line-numbers')
+    this.elLineNumbers.remove()
   }
 
   createElement (elementTag, whereToAppend) {
@@ -99,7 +106,7 @@ export default class CodeFlask {
     this.opts.defaultTheme = this.opts.defaultTheme !== false
     this.opts.areaId = this.opts.areaId || null
     this.opts.ariaLabelledby = this.opts.ariaLabelledby || null
-    this.opts.readonly = this.opts.readonly || null
+    this.opts.readonly = this.opts.readonly || false
 
     // if handleTabs is not either true or false, make it true by default
     if (typeof this.opts.handleTabs !== 'boolean') {
@@ -159,7 +166,11 @@ export default class CodeFlask {
   }
 
   listenTextarea () {
-    this.elTextarea.addEventListener('input', (e) => {
+    this.elTextarea.addEventListener('input', this.events._input = (e) => {
+      console.log()
+      if (this.opts.readonly) {
+        return;
+      }
       this.code = e.target.value
       this.elCode.innerHTML = escapeHtml(e.target.value)
       this.highlight()
@@ -169,7 +180,7 @@ export default class CodeFlask {
       }, 1)
     })
 
-    this.elTextarea.addEventListener('keydown', (e) => {
+    this.elTextarea.addEventListener('keydown', this.events._keydown = (e) => {
       if (this.opts.readonly) {
         return;
       }
@@ -178,7 +189,7 @@ export default class CodeFlask {
       this.handleNewLineIndentation(e)
     })
 
-    this.elTextarea.addEventListener('scroll', (e) => {
+    this.elTextarea.addEventListener('scroll', this.events._scroll = (e) => {
       this.elPre.style.transform = `translate3d(-${e.target.scrollLeft}px, -${e.target.scrollTop}px, 0)`
       if (this.elLineNumbers) {
         this.elLineNumbers.style.transform = `translate3d(0, -${e.target.scrollTop}px, 0)`
@@ -303,7 +314,6 @@ export default class CodeFlask {
 
   setLineNumber () {
     this.lineNumber = this.code.split('\n').length
-
     if (this.opts.lineNumbers) {
       this.updateLineNumbersCount()
     }
@@ -423,9 +433,48 @@ export default class CodeFlask {
 
   enableReadonlyMode () {
     this.elTextarea.setAttribute('readonly', true)
+    this.opts.readonly = true;
   }
 
   disableReadonlyMode () {
     this.elTextarea.removeAttribute('readonly')
+    this.opts.readonly = false;
   }
+
+  toggleReadonlyMode () {
+    if(!this.opts.readonly){
+      this.enableReadonlyMode()
+    }else{
+      this.disableReadonlyMode()
+
+    }
+  }
+
+
+  enableLineNumbers() {
+    this.opts.lineNumbers = true;
+    this.createLineNumbers()
+    this.updateLineNumbersCount()
+  }
+
+  disableLineNumbers() {
+    this.opts.lineNumbers = false;
+    this.destroyLineNumbers()
+  }
+
+  toggleLineNumbers(){
+    if(!this.opts.lineNumbers){
+      this.enableLineNumbers()
+    }else{
+      this.disableLineNumbers()
+    }
+  }
+
+  dispose(){
+    this.elTextarea.removeEventListener("input",this.events._input)
+    this.elTextarea.removeEventListener("keydown",this.events._keydown)
+    this.elTextarea.removeEventListener("scroll",this.events._scroll)
+    this.elWrapper.remove();
+  }
+
 }
