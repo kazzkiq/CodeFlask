@@ -3,6 +3,15 @@ import { injectCss } from './styles/injector'
 import { defaultCssTheme } from './styles/theme-default'
 import { escapeHtml } from './utils/html-escape'
 
+const selfClosingCharMap = {
+  '(': ')',
+  '[': ']',
+  '{': '}',
+  '<': '>',
+  "'": "'",
+  '"': '"'
+}
+
 export default class CodeFlask {
   constructor (selectorOrElement, Prism, opts) {
     if (!selectorOrElement) {
@@ -101,14 +110,11 @@ export default class CodeFlask {
     this.opts.ariaLabelledby = this.opts.ariaLabelledby || null
     this.opts.readonly = this.opts.readonly || null
     this.opts.customEventListeners = this.opts.customEventListeners || {}
+    this.opts.selfClosingCharacters = this.opts.selfClosingCharacters || ['(', '[', '{', '<', "'", '"']
 
     // if handleTabs is not either true or false, make it true by default
     if (typeof this.opts.handleTabs !== 'boolean') {
       this.opts.handleTabs = true
-    }
-    // if handleTabs is not either true or false, make it true by default
-    if (typeof this.opts.handleSelfClosingCharacters !== 'boolean') {
-      this.opts.handleSelfClosingCharacters = true
     }
     // if handleTabs is not either true or false, make it true by default
     if (typeof this.opts.handleNewLineIndentation !== 'boolean') {
@@ -270,44 +276,15 @@ export default class CodeFlask {
   }
 
   handleSelfClosingCharacters (e) {
-    if (!this.opts.handleSelfClosingCharacters) return
-    const openChars = ['(', '[', '{', '<', '\'', '"']
-    const closeChars = [')', ']', '}', '>', '\'', '"']
-    const key = e.key
+    if (!this.opts.selfClosingCharacters.length) return
+    const openChars = this.opts.selfClosingCharacters
+    const closeChars = this.opts.selfClosingCharacters.map(c => selfClosingCharMap[c])
 
-    if (!openChars.includes(key) && !closeChars.includes(key)) {
+    if (!openChars.includes(e.key) && !closeChars.includes(e.key)) {
       return
     }
 
-    switch (key) {
-      case '(':
-      case ')':
-        this.closeCharacter(key)
-        break
-
-      case '[':
-      case ']':
-        this.closeCharacter(key)
-        break
-
-      case '{':
-      case '}':
-        this.closeCharacter(key)
-        break
-
-      case '<':
-      case '>':
-        this.closeCharacter(key)
-        break
-
-      case '\'':
-        this.closeCharacter(key)
-        break
-
-      case '"':
-        this.closeCharacter(key)
-        break
-    }
+    this.closeCharacter(e.key)
   }
 
   setLineNumber () {

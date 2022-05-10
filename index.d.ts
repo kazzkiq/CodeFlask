@@ -20,13 +20,14 @@ export interface CodeFlaskOptions {
   areaId?: string
   ariaLabelledby?: string
   readonly?: boolean
+  selfClosingCharacters: string[]
   customEventListeners?: EventListeners
 }
 
 export default class CodeFlask {
   constructor(selectorOrElement: Element | string, opts: CodeFlaskOptions)
 
-  updateCode(newCode: string): void 
+  updateCode(newCode: string): void
   updateLanguage(newLanguage: string): void
   addLanguage(name: string, options: LanguageDefinition): void
 
