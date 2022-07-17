@@ -7,9 +7,10 @@ npm i '@acarl005/codeflask'
 I modified [CodeFlask](https://github.com/kazzkiq/CodeFlask) to be able to...
 
 1. Make PrismJS a peer dependency
-1. Attach custom event listeners to the editor
+1. Attach (and remove) custom event listeners to the editor
 1. Support the [Line Highlight](https://prismjs.com/plugins/line-highlight/) plugin in PrismJS
 1. Fix this issue: kazzkiq/CodeFlask#69
+1. Fix bugs with tab hotkey for indentation
 1. Make the self-closing characters configurable
 
 ```javascript
