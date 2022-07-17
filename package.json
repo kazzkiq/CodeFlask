@@ -12,7 +12,7 @@
     "README.md",
     "LICENSE"
   ],
-  "scripts": {
+  "was_scripts": {
     "build": "rollup -c",
     "dev": "serve build & rollup -c -w",
     "start": "serve public",
@@ -20,27 +20,22 @@
     "test": "wdio test/wdio.conf.js",
     "prepublishOnly": "npm install && npm run build"
   },
-  "dependencies": {
-    "@types/prismjs": "^1.9.1",
-    "prismjs": "^1.14.0"
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "playwright test"
   },
   "devDependencies": {
-    "@wdio/cli": "^6.1.15",
-    "@wdio/local-runner": "^6.1.14",
-    "@wdio/mocha-framework": "^6.1.14",
-    "@wdio/spec-reporter": "^6.1.14",
-    "@wdio/sync": "^6.1.14",
-    "chai": "^4.1.2",
-    "chromedriver": "^83.0.0",
-    "micro": "^9.3.0",
-    "mocha": "^5.1.1",
-    "rollup": "^0.58.1",
-    "rollup-plugin-buble": "^0.19.2",
-    "rollup-plugin-commonjs": "^9.1.0",
-    "rollup-plugin-node-resolve": "^3.0.3",
-    "rollup-plugin-uglify": "^3.0.0",
-    "serve": "^7.0.0",
-    "wdio-chromedriver-service": "^6.0.3"
+    "@esm-bundle/chai": "^4.3.4-fix.0",
+    "@playwright/test": "^1.23.4",
+    "@web/test-runner": "^0.13.31",
+    "@web/test-runner-playwright": "^0.8.9",
+    "vite": "^3.0.0"
+  },
+  "dependencies": {
+    "@types/prismjs": "^1.26.0",
+    "prismjs": "^1.28.0"
   },
   "repository": {
     "type": "git",

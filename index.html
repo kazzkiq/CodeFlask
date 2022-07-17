@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>CodeFlask Test Page</title>
-  <script src="codeflask.min.js"></script>
   <style>
     body {
       font-family: Arial;
@@ -32,8 +31,10 @@ window.onLoad = function() {
     Hey("Jude");
     Hey("Don't make it bad.");
 }</div>
-  <script>
-    const flask = new CodeFlask('.test', {
+  <script type="module">
+    import CodeFlask from "./src/codeflask"
+    window.CodeFlask = CodeFlask   // this is for the tests
+    window.flask = new CodeFlask('.test', {
       language: 'js',
       lineNumbers: true,
       areaId: 'thing1',
