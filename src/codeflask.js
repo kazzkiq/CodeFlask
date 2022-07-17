@@ -42,6 +42,7 @@ export default class CodeFlask {
 
     this.Prism = Prism
     this.opts = opts
+    this.events = {}
     this.startEditor()
   }
 
@@ -108,7 +109,7 @@ export default class CodeFlask {
     this.opts.defaultTheme = this.opts.defaultTheme !== false
     this.opts.areaId = this.opts.areaId || null
     this.opts.ariaLabelledby = this.opts.ariaLabelledby || null
-    this.opts.readonly = this.opts.readonly || null
+    this.opts.readonly = this.opts.readonly || false
     this.opts.customEventListeners = this.opts.customEventListeners || {}
     this.opts.selfClosingCharacters = this.opts.selfClosingCharacters || ['(', '[', '{', '<', "'", '"']
 
@@ -167,13 +168,14 @@ export default class CodeFlask {
 
   listenTextarea () {
     const customEventListeners = this.opts.customEventListeners
-    for (const eventName in customEventListeners) {
-      if (customEventListeners.hasOwnProperty(eventName)) {
-        this.elTextarea.addEventListener(eventName, customEventListeners[eventName])
-      }
+    for (const [eventName, func] of Object.entries(customEventListeners)) {
+      this.elTextarea.addEventListener(eventName, func)
     }
 
-    this.elTextarea.addEventListener('input', (e) => {
+    this.elTextarea.addEventListener('input', this.events.input = (e) => {
+      if (this.opts.readonly) {
+        return;
+      }
       this.code = e.target.value
       this.elCode.innerHTML = escapeHtml(e.target.value)
       this.highlight()
@@ -183,7 +185,7 @@ export default class CodeFlask {
       }, 1)
     })
 
-    this.elTextarea.addEventListener('keydown', (e) => {
+    this.elTextarea.addEventListener('keydown', this.events.keydown = (e) => {
       if (this.opts.readonly) {
         return;
       }
@@ -192,13 +194,22 @@ export default class CodeFlask {
       this.handleNewLineIndentation(e)
     })
 
-    this.elTextarea.addEventListener('scroll', (e) => {
+    this.elTextarea.addEventListener('scroll', this.events.scroll = (e) => {
       this.elPre.style.transform = `translate3d(-${e.target.scrollLeft}px, -${e.target.scrollTop}px, 0)`
       if (this.elLineNumbers) {
         this.elLineNumbers.style.transform = `translate3d(0, -${e.target.scrollTop}px, 0)`
         this.elPre.style.width = `calc(100% - 40px + ${e.target.scrollLeft}px)`
       }
     })
+  }
+
+  removeEventListeners () {
+    for (const [eventName, func] of Object.entries(customEventListeners)) {
+      this.elTextarea.removeEventListener(eventName, func)
+    }
+    for (const [eventName, func] of Object.entries(this.events)) {
+      this.elTextarea.removeEventListener(eventName, func)
+    }
   }
 
   handleTabs (e) {
@@ -264,14 +275,28 @@ export default class CodeFlask {
         input.selectionEnd = selStartPos + selectionVal.length + endIndentLen
         input.selectionDirection = selectionDir
       } else {
-        input.value = beforeSelection + indent + afterSelection
-        input.selectionStart = selStartPos + indent.length
-        input.selectionEnd = selStartPos + indent.length
+        const activeLineRegexp = new RegExp(`(\\n?)((?:${indent})*)([^\\n]*)$`)
+        if (e.shiftKey) {
+          const newBeforeSelection = beforeSelection.replace(
+            activeLineRegexp,
+            (_, maybeNewline, leadingIndent, content) => maybeNewline + leadingIndent.slice(0, -1 * indent.length) + content
+          )
+          if (newBeforeSelection !== beforeSelection) {
+            input.value = newBeforeSelection + afterSelection
+            input.setSelectionRange(selStartPos - indent.length, selStartPos - indent.length)
+          }
+        } else {
+          const newBeforeSelection = beforeSelection.replace(
+            activeLineRegexp,
+            (_, maybeNewline, leadingIndent, content) => maybeNewline + leadingIndent + indent + content
+          )
+          input.value = newBeforeSelection + afterSelection
+          input.setSelectionRange(selStartPos + indent.length, selStartPos + indent.length)
+        }
       }
 
       var newCode = input.value
       this.updateCode(newCode)
-      this.elTextarea.selectionEnd = selEndPos + this.opts.tabSize
     }
   }
 
@@ -389,7 +414,7 @@ export default class CodeFlask {
     this.Prism.highlightElement(this.elCode, false)
   }
 
-  highlightLines(lineSpec) {
+  highlightLines (lineSpec) {
     /* This requires the "line-highlight" plugin in PrismJS
     Examples
       5: The 5th line
