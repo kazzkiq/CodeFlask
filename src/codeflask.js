@@ -190,6 +190,7 @@ export default class CodeFlask {
         return;
       }
       this.handleTabs(e)
+      this.handleBackspace(e)
       this.handleSelfClosingCharacters(e)
       this.handleNewLineIndentation(e)
     })
@@ -212,92 +213,112 @@ export default class CodeFlask {
     }
   }
 
+  getSelectInfo () {
+    var input = this.elTextarea
+    var selStartPos = input.selectionStart
+    var selEndPos = input.selectionEnd
+    var beforeSelection = input.value.substr(0, selStartPos)
+    var selectionVal = input.value.substring(selStartPos, selEndPos)
+    var afterSelection = input.value.substring(selEndPos)
+    return { selStartPos, selEndPos, beforeSelection, selectionVal, afterSelection }
+  }
+
   handleTabs (e) {
-    if (this.opts.handleTabs) {
-      if (e.keyCode !== 9) {
-        return
-      }
-      e.preventDefault()
+    if (!this.opts.handleTabs || e.key !== "Tab") {
+      return
+    }
+    e.preventDefault()
 
-      var input = this.elTextarea
-      var selectionDir = input.selectionDirection
-      var selStartPos = input.selectionStart
-      var selEndPos = input.selectionEnd
-      var inputVal = input.value
+    var input = this.elTextarea
+    var inputVal = input.value
+    var { selStartPos, selEndPos, beforeSelection, selectionVal, afterSelection } = this.getSelectInfo()
+    const indent = ' '.repeat(this.opts.tabSize)
 
-      var beforeSelection = inputVal.substr(0, selStartPos)
-      var selectionVal = inputVal.substring(selStartPos, selEndPos)
-      var afterSelection = inputVal.substring(selEndPos)
-      const indent = ' '.repeat(this.opts.tabSize)
+    if (selStartPos !== selEndPos && selectionVal.length >= indent.length) {
+      var currentLineStart = selStartPos - beforeSelection.split('\n').pop().length
+      var startIndentLen = indent.length
+      var endIndentLen = indent.length
 
-      if (selStartPos !== selEndPos && selectionVal.length >= indent.length) {
-        var currentLineStart = selStartPos - beforeSelection.split('\n').pop().length
-        var startIndentLen = indent.length
-        var endIndentLen = indent.length
+      // Unindent
+      if (e.shiftKey) {
+        var currentLineStartStr = inputVal.substr(currentLineStart, indent.length)
+        // Line start whit indent
+        if (currentLineStartStr === indent) {
+          startIndentLen = -startIndentLen
 
-        // Unindent
-        if (e.shiftKey) {
-          var currentLineStartStr = inputVal.substr(currentLineStart, indent.length)
-          // Line start whit indent
-          if (currentLineStartStr === indent) {
-            startIndentLen = -startIndentLen
-
-            if (currentLineStart > selStartPos) {
-              // Indent is in selection
-              selectionVal = selectionVal.substring(0, currentLineStart) + selectionVal.substring(currentLineStart + indent.length)
-              endIndentLen = 0
-            } else if (currentLineStart === selStartPos) {
-              // Indent is in start of selection
-              startIndentLen = 0
-              endIndentLen = 0
-              selectionVal = selectionVal.substring(indent.length)
-            } else {
-              // Indent is before selection
-              endIndentLen = -endIndentLen
-              beforeSelection = beforeSelection.substring(0, currentLineStart) + beforeSelection.substring(currentLineStart + indent.length)
-            }
-          } else {
+          if (currentLineStart > selStartPos) {
+            // Indent is in selection
+            selectionVal = selectionVal.substring(0, currentLineStart) + selectionVal.substring(currentLineStart + indent.length)
+            endIndentLen = 0
+          } else if (currentLineStart === selStartPos) {
+            // Indent is in start of selection
             startIndentLen = 0
             endIndentLen = 0
+            selectionVal = selectionVal.substring(indent.length)
+          } else {
+            // Indent is before selection
+            endIndentLen = -endIndentLen
+            beforeSelection = beforeSelection.substring(0, currentLineStart) + beforeSelection.substring(currentLineStart + indent.length)
           }
-
-          selectionVal = selectionVal.replace(new RegExp('\n' + indent.split('').join('\\'), 'g'), '\n')
         } else {
-          // Indent
-          beforeSelection = beforeSelection.substr(0, currentLineStart) + indent + beforeSelection.substring(currentLineStart, selStartPos)
-          selectionVal = selectionVal.replace(/\n/g, '\n' + indent)
+          startIndentLen = 0
+          endIndentLen = 0
         }
 
-        // Set new indented value
-        input.value = beforeSelection + selectionVal + afterSelection
-
-        input.selectionStart = selStartPos + startIndentLen
-        input.selectionEnd = selStartPos + selectionVal.length + endIndentLen
-        input.selectionDirection = selectionDir
+        selectionVal = selectionVal.replace(new RegExp('\n' + indent.split('').join('\\'), 'g'), '\n')
       } else {
-        const activeLineRegexp = new RegExp(`(\\n?)((?:${indent})*)([^\\n]*)$`)
-        if (e.shiftKey) {
-          const newBeforeSelection = beforeSelection.replace(
-            activeLineRegexp,
-            (_, maybeNewline, leadingIndent, content) => maybeNewline + leadingIndent.slice(0, -1 * indent.length) + content
-          )
-          if (newBeforeSelection !== beforeSelection) {
-            input.value = newBeforeSelection + afterSelection
-            input.setSelectionRange(selStartPos - indent.length, selStartPos - indent.length)
-          }
-        } else {
-          const newBeforeSelection = beforeSelection.replace(
-            activeLineRegexp,
-            (_, maybeNewline, leadingIndent, content) => maybeNewline + leadingIndent + indent + content
-          )
-          input.value = newBeforeSelection + afterSelection
-          input.setSelectionRange(selStartPos + indent.length, selStartPos + indent.length)
-        }
+        // Indent
+        beforeSelection = beforeSelection.substr(0, currentLineStart) + indent + beforeSelection.substring(currentLineStart, selStartPos)
+        selectionVal = selectionVal.replace(/\n/g, '\n' + indent)
       }
 
-      var newCode = input.value
-      this.updateCode(newCode)
+      // Set new indented value
+      input.value = beforeSelection + selectionVal + afterSelection
+      input.setSelectionRange(selStartPos + startIndentLen, selStartPos + selectionVal.length + endIndentLen)
+    } else {
+      const activeLineRegexp = new RegExp(`(\\n?)((?:${indent})*)([^\\n]*)$`)
+      if (e.shiftKey) {
+        const newBeforeSelection = beforeSelection.replace(
+          activeLineRegexp,
+          (_, maybeNewline, leadingIndent, content) => maybeNewline + leadingIndent.slice(0, -1 * indent.length) + content
+        )
+        if (newBeforeSelection !== beforeSelection) {
+          input.value = newBeforeSelection + afterSelection
+          input.setSelectionRange(selStartPos - indent.length, selStartPos - indent.length)
+        }
+      } else {
+        const newBeforeSelection = beforeSelection.replace(
+          activeLineRegexp,
+          (_, maybeNewline, leadingIndent, content) => maybeNewline + leadingIndent + indent + content
+        )
+        input.value = newBeforeSelection + afterSelection
+        input.setSelectionRange(selStartPos + indent.length, selStartPos + indent.length)
+      }
     }
+
+    this.updateCode(input.value)
+  }
+
+  handleBackspace (e) {
+    if (e.key !== "Backspace") {
+      return
+    }
+
+    var { selStartPos, beforeSelection, selectionVal, afterSelection } = this.getSelectInfo()
+    if (selectionVal !== '') {
+      return
+    }
+
+    if (!beforeSelection.match(/\n(  ){1,}$/)) {
+      return
+    }
+
+    e.preventDefault()
+    const newBeforeSelection = beforeSelection.replace(/  $/, '')
+    const input = this.elTextarea
+    input.value = newBeforeSelection + afterSelection
+    this.updateCode(input.value)
+    input.setSelectionRange(selStartPos - 2, selStartPos - 2)
   }
 
   handleSelfClosingCharacters (e) {
@@ -321,19 +342,14 @@ export default class CodeFlask {
   }
 
   handleNewLineIndentation (e) {
-    if (!this.opts.handleNewLineIndentation) return
-    if (e.keyCode !== 13) {
+    if (!this.opts.handleNewLineIndentation || e.keyCode !== 13) {
       return
     }
 
     e.preventDefault()
     var input = this.elTextarea
-    var selStartPos = input.selectionStart
-    var selEndPos = input.selectionEnd
     var inputVal = input.value
-
-    var beforeSelection = inputVal.substr(0, selStartPos)
-    var afterSelection = inputVal.substring(selEndPos)
+    var { selStartPos, beforeSelection, afterSelection } = this.getSelectInfo()
 
     var lineStart = inputVal.lastIndexOf('\n', selStartPos - 1)
     var spaceLast = lineStart + inputVal.slice(lineStart + 1).search(/[^ ]|$/)
