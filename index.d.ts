@@ -7,7 +7,7 @@ export type LanguageDefinition = {
 }
 
 export type EventListeners = {
-  [index: string]: (UIEvent) => void
+  [index: string]: (e: UIEvent) => void
 }
 
 export interface CodeFlaskOptions {
@@ -25,7 +25,7 @@ export interface CodeFlaskOptions {
 }
 
 export default class CodeFlask {
-  constructor(selectorOrElement: Element | string, opts: CodeFlaskOptions)
+  constructor(selectorOrElement: Element | string, Prism: any, opts: CodeFlaskOptions)
 
   updateCode(newCode: string): void
   updateLanguage(newLanguage: string): void

@@ -1,6 +1,6 @@
 {
   "name": "@acarl005/codeflask",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A micro code-editor for awesome web pages",
   "main": "build/codeflask.min.js",
   "module": "build/codeflask.module.js",
