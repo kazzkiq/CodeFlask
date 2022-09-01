@@ -6,9 +6,9 @@ export type LanguageDefinition = {
   [token: string]: prism.LanguageDefinition | RegExp
 }
 
-export type EventListeners = {
-  [index: string]: (e: UIEvent) => void
-}
+export type EventListeners = Partial<{
+    [K in keyof WindowEventMap]: (e: WindowEventMap[K]) => void
+}>
 
 export interface CodeFlaskOptions {
   language?: string
