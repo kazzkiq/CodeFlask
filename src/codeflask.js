@@ -330,6 +330,10 @@ export default class CodeFlask {
       return
     }
 
+    if (e.metaKey || e.ctrlKey) {
+      return
+    }
+
     this.closeCharacter(e.key)
   }
 
