@@ -38,6 +38,7 @@ export default class CodeFlask {
   enableReadonlyMode(): void
 
   removeEventListeners(): void
+  blur(): void
   highlight(): void
   highlightLines(lineSpec: string): void
 }

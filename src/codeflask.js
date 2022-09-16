@@ -430,6 +430,10 @@ export default class CodeFlask {
     this.updateCode(this.code)
   }
 
+  blur () {
+    this.elTextarea.blur()
+  }
+
   highlight () {
     this.Prism.highlightElement(this.elCode, false)
   }
