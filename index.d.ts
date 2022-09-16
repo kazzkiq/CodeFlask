@@ -6,6 +6,10 @@ export type LanguageDefinition = {
   [token: string]: prism.LanguageDefinition | RegExp
 }
 
+export type EventListeners = Partial<{
+    [K in keyof WindowEventMap]: (e: WindowEventMap[K]) => void
+}>
+
 export interface CodeFlaskOptions {
   language?: string
   rtl?: boolean
@@ -16,12 +20,14 @@ export interface CodeFlaskOptions {
   areaId?: string
   ariaLabelledby?: string
   readonly?: boolean
+  selfClosingCharacters: string[]
+  customEventListeners?: EventListeners
 }
 
 export default class CodeFlask {
-  constructor(selectorOrElement: Element | string, opts: CodeFlaskOptions)
+  constructor(selectorOrElement: Element | string, Prism: any, opts: CodeFlaskOptions)
 
-  updateCode(newCode: string): void 
+  updateCode(newCode: string): void
   updateLanguage(newLanguage: string): void
   addLanguage(name: string, options: LanguageDefinition): void
 
@@ -30,4 +36,9 @@ export default class CodeFlask {
 
   disableReadonlyMode(): void
   enableReadonlyMode(): void
+
+  removeEventListeners(): void
+  blur(): void
+  highlight(): void
+  highlightLines(lineSpec: string): void
 }

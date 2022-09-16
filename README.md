@@ -1,150 +1,40 @@
-[![npm version](https://badge.fury.io/js/codeflask.svg)](https://www.npmjs.com/package/codeflask)
-[![Build Status](https://travis-ci.org/kazzkiq/CodeFlask.svg?branch=master)](https://travis-ci.org/kazzkiq/CodeFlask)
+# CodeFlask Mod
 
-<p align="center">
-  <img src="logo.png" width="190"><br>
-    CodeFlask: A micro code-editor for awesome web pages.
-</p>
-
-<p align="center">
-  <img src="code.png" width="739">
-</p>
-
-## Installation
-
-You can install CodeFlask via npm:
-
-```
-npm install codeflask
+```bash
+npm i '@acarl005/codeflask'
 ```
 
-Or use it directly in browser via cdn service:
+I modified [CodeFlask](https://github.com/kazzkiq/CodeFlask) to be able to...
 
-```
-https://unpkg.com/codeflask/build/codeflask.min.js
-```
+1. Make PrismJS a peer dependency
+1. Attach (and remove) custom event listeners to the editor
+1. Support the [Line Highlight](https://prismjs.com/plugins/line-highlight/) plugin in PrismJS
+1. Fix this issue: kazzkiq/CodeFlask#69
+1. Fix bugs with tab hotkey for indentation
+1. Make the self-closing characters configurable
 
-## Usage
+```javascript
+import CodeFlask from "codeflask"
+import Prism from "prismjs"
 
-```js
-import CodeFlask from 'codeflask';
+const flask = new CodeFlask(editor, Prism, {
+  language: "js",
+  selfClosingCharacters: ['(', '[', '{', "'", '"'],
+  customEventListeners: {
+    "keydown": e => {
+      if (e.key == "Enter") {
+        e.preventDefault()
+        e.stopImmediatePropagation()
+        // do custom stuff
+      }
+    }
+  }
+})
 
-const flask = new CodeFlask('#my-selector', { language: 'js' });
-```
-You can also pass a DOM element instead of a selector:
-```js
-import CodeFlask from 'codeflask';
-
-const editorElem = document.getElementById('editor');
-const flask = new CodeFlask(editorElem, { language: 'js' });
-```
-Usage with Shadow DOM:
-```js
-import CodeFlask from 'codeflask';
-...
-const shadowElem = this.shadowRoot.querySelector('#editor');
-const flask = new CodeFlask(shadowElem, { language: 'js', styleParent: this.shadowRoot });
-```
-### Listening for changes in editor
-
-```js
-flask.onUpdate((code) => {
-  // do something with code here.
-  // this will trigger whenever the code
-  // in the editor changes.
-});
+flask.highlightLines("4-7")
 ```
 
-### Updating the editor programatically
-
-```js
-// This will also trigger .onUpdate()
-flask.updateCode('const my_new_code_here = "Blabla"');
-```
-
-### Getting the current code from editor
-
-```js
-const code = flask.getCode();
-```
-
-### Enabling line numbers
-
-```js
-import CodeFlask from 'codeflask';
-
-const flask = new CodeFlask('#my-selector', {
-  language: 'js',
-  lineNumbers: true
-});
-```
-
-### Enabling rtl (right to left writing)
-
-```js
-import CodeFlask from 'codeflask';
-
-const flask = new CodeFlask('#my-selector', {
-  language: 'js',
-  rtl: true
-});
-```
-
-### Enabling read only mode
-
-```js
-import CodeFlask from 'codeflask';
-
-const flask = new CodeFlask('#my-selector', {
-  language: 'js',
-  readonly: true
-});
-```
-
-### Adding other languages support:
-
-```js
-flask.addLanguage('ruby', options)
-```
-
-#### For Example to add 'Ruby'
-
-```js
-import Prism from 'prismjs';
-import CodeFlask from 'codeflask';
-
-const flask = new CodeFlask('#my-selector', {
-  language: 'ruby',
-  readonly: true
-});
-
-flask.addLanguage('ruby', Prism.languages['ruby']);
-```
-
-This API is simply a proxy to add a new language to [Prism](http://prismjs.com/) itself (the code highlighter). The `options` parameter must be the same accepted in Prism. You can read more about it [here](http://prismjs.com/extending.html#language-definitions).
-
-By default, CodeFlask supports the following languages (which are also the default supported in Prism):
-
-- Markup (HTML/XML);
-- CSS;
-- C-like;
-- JavaScript;
-
-### Adding your own theme to CodeFlask
-
-By default, CodeFlask comes with a simple theme made from scratch called **[CodeNoon](https://github.com/kazzkiq/CodeFlask.js/blob/master/src/styles/theme-default.js)**.
-
-You can easily override this theme with your own by writting your own CSS and adding it to your project. If that's the case, you should also disable **CodeNoon** with the `defaultTheme` option:
-
-```js
-import CodeFlask from 'codeflask';
-
-const flask = new CodeFlask('#my-selector', {
-  language: 'js',
-  defaultTheme: false
-});
-```
-
-# Credits & Thanks
-
-CodeFlask.js was made possible by awesome open-source projects such as [Prism.js](https://github.com/PrismJS/prism) and [Rollup](https://github.com/rollup/rollup).
+PrismJS is highly customizable.
+It actually offers custom builds with more plugins that you can opt into.
+This is an awesome and rare feature b/c you can minimize the bundle by omitting unneeded functionality.
+Therefore, it should be a peer dependency, b/c CodeFlask can't know which build with which plugins you'll need.
