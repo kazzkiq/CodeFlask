@@ -182,6 +182,7 @@ export default class CodeFlask {
       this.elPre.style.transform = `translate3d(-${e.target.scrollLeft}px, -${e.target.scrollTop}px, 0)`
       if (this.elLineNumbers) {
         this.elLineNumbers.style.transform = `translate3d(0, -${e.target.scrollTop}px, 0)`
+        this.elPre.style.width = `calc(100% - 40px + ${e.target.scrollLeft}px)`
       }
     })
   }
